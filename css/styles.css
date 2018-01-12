@@ -1,48 +1,3 @@
-.testborder {
-    margin:0px;
-	padding:0px;
-    border: #cdcdcd medium solid;
-    border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-}
-.infobox{
-	padding-top:1px;
-}
-.nopadding{
-	padding:0px;
-}
-.nomargin{
-	margin:0px;
-}
-.bottom{
-	position:absolute; bottom:0;
-}
-.current{
-	background-color:grey;
-}
-p.menu-heading{
-	text-align: center;
-    position: relative;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-}
-p.menu-heading-active{
-	font-weight:bold;
-}
-.vcenter {
-    display: inline-block;
-    vertical-align: middle;
-    float: none;
-}
-.navbar-default .navbar-nav>li>a:focus .caret{
-	transform:rotate(-90deg);
-	transition:all 0.3s ease-in-out; 
-}
-
-
 /* --- VARS --- */
 /* --- MIXINS --- */
 /* --- DEMO CONTENT--- */
@@ -98,7 +53,7 @@ p.menu-heading-active{
     background-image: -webkit-linear-gradient(left, color-stop(#7352a4 50%), color-stop(#583e7e 50%));
     background-image: -moz-linear-gradient(left, #7352a4 50%, #583e7e 50%);
     background-image: linear-gradient(to right, #7352a4 50%, #583e7e 50%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#7352a4', endColorstr='#583e7e', GradientType=1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#7352a4", endColorstr="#583e7e", GradientType=1);
     /* IE6-9 */
   }
   .navbar-main-container .navbar-nav {
@@ -120,7 +75,7 @@ p.menu-heading-active{
     background-image: -webkit-linear-gradient(left, color-stop(#583e7e 0%), color-stop(#7352a4 100%));
     background-image: -moz-linear-gradient(left, #583e7e 0%, #7352a4 100%);
     background-image: linear-gradient(to right, #583e7e 0%, #7352a4 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#583e7e', endColorstr='#7352a4', GradientType=1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#583e7e", endColorstr="#7352a4", GradientType=1);
     /* IE6-9 */
   }
   .navbar-main li:first-child:before {
