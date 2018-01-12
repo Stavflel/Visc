@@ -1,0 +1,43 @@
+.testborder {
+    margin:0px;
+	padding:0px;
+    border: #cdcdcd medium solid;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+.infobox{
+	padding-top:1px;
+}
+.nopadding{
+	padding:0px;
+}
+.nomargin{
+	margin:0px;
+}
+.bottom{
+	position:absolute; bottom:0;
+}
+.current{
+	background-color:grey;
+}
+p.menu-heading{
+	text-align: center;
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+p.menu-heading-active{
+	font-weight:bold;
+}
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+.navbar-default .navbar-nav>li>a:focus .caret{
+	transform:rotate(-90deg);
+	transition:all 0.3s ease-in-out; //for smoothness
+}
