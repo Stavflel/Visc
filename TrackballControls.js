@@ -121,7 +121,7 @@ THREE.TrackballControls = function ( object, domElement ) {
                 ( pageX - _this.screen.left ) / _this.screen.width,
                 ( pageY - _this.screen.top ) / _this.screen.height
             );
-
+            console.log("page x position: " + ( pageX - _this.screen.left ) / _this.screen.width);
             return vector;
 
         };
@@ -200,7 +200,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
     }() );
 
-
+    //Renderss in update camera, controll the zoom
     this.zoomCamera = function () {
 
         var factor;
@@ -298,7 +298,7 @@ THREE.TrackballControls = function ( object, domElement ) {
         _eye.subVectors( _this.object.position, _this.target );
 
         if ( ! _this.noRotate ) {
-
+            console.log("should update all time?");
             _this.rotateCamera();
 
         }
@@ -404,7 +404,9 @@ THREE.TrackballControls = function ( object, domElement ) {
         }
 
         if ( _state === STATE.ROTATE && ! _this.noRotate ) {
-
+            console.log("where art you?");
+            console.log("event page X?:  " + event.pageX);
+            console.log("event page Y?:  " + event.pageY);
             _moveCurr.copy( getMouseOnCircle( event.pageX, event.pageY ) );
             _movePrev.copy( _moveCurr );
 
