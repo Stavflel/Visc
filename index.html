@@ -161,12 +161,9 @@
         var container;
         var geometryArray;
         var currentVectorPosition = new THREE.Vector3(0,0,0);
-        var targetRotation = 0;
-        var newCameraPosition;
+        var setVectorPosition = new THREE.Vector3(0,0,0);
 
-        //  var axisSystem;
-        var objectNameLabel;
-        var directionalLight;
+        var _sphericalDelta = new THREE.Spherical();
 
         ///TODO GET all parts that is going to change the color with color clicked
 		const bodyElements = [
@@ -223,15 +220,15 @@
 
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(45, containerWidth / containerHeight, 1, 1000);
-            camera.position.set(0, -20, 6);
+            camera.position.set(0, -20, 2);
             camera.lookAt(scene.position);
             scene.add(camera);
 
             controls = new THREE.TrackballControls(camera, renderer.domElement);
-          //  _controls = new THREE.OrbitControls(camera, renderer.domElement);
+          // _controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-           // _controls.panSpeed = 0.8;
-            //_controls.noPan = false;
+         //   _controls.panSpeed = 0.8;
+          //  _controls.noPan = false;
 
            // axisSystem = new AxisSystem(camera, controls);
 
@@ -403,7 +400,7 @@
             // Refocus camera the center of the given object
             var centerOfGravity = boundingBoxOfNode.center();
             var newCameraPosition = new THREE.Vector3();
-            console.log("le controls?? " + controls.target);
+         //   console.log("le controls?? " + _controls.target);
             newCameraPosition.subVectors(centerOfGravity, controls.target);
             camera.position.addVectors(camera.position, newCameraPosition);
             camera.lookAt(centerOfGravity);
@@ -434,26 +431,24 @@
           //  console.log("ehh jaa?" + camera.position.y);
             camera.updateMatrixWorld();
             var vector = camera.position.clone();
-            //vector.applyMatrix(vector);
-          /*  console.log("Camera X: " + camera.position.x);
-            console.log("Camera Y: " + camera.position.y);
-            console.log("Camera Z: " + camera.position.z);*/
-
             currentVectorPosition.set(camera.position.x, camera.position.y, camera.position.z);
-
-            /*console.log("Current X: " + currentVectorPosition.x);
-            console.log("Current Y: " + currentVectorPosition.y);
-            console.log("Current Z: " + currentVectorPosition.z);*/
-
-//            console.log("angle to back position: " + getAngleToPosition());
-           // camera.rotateX(getAngleToPosition());
-          //  camera.rotateX(getAngleToPosition());
             raycaster.setFromCamera(mouse,camera);
             renderer.render(scene, camera);
         }
 
         function getAngleToPosition() {
             return defaultViews.back.angleTo(currentVectorPosition);
+        }
+        function _getAutoRotationAngle() {
+
+            return 2 * Math.PI / 60 / 60 * 2.0;
+
+        }
+
+        function _rotateLeft( angle ) {
+
+            _sphericalDelta.theta -= angle;
+
         }
 
         /***

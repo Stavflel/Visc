@@ -284,13 +284,15 @@ THREE.OrbitControls = function ( object, domElement ) {
     }
 
     function rotateLeft( angle ) {
-
+        console.log("le angle? : " + angle);
+        console.log("sphericalDelta: " + sphericalDelta.theta);
         sphericalDelta.theta -= angle;
 
     }
 
     function rotateUp( angle ) {
-
+        console.log("Up angle? : " + angle);
+        console.log(" Up sphericalDelta: " + sphericalDelta.phi);
         sphericalDelta.phi -= angle;
 
     }

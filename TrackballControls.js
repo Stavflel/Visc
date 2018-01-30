@@ -147,6 +147,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
     this.rotateCamera = ( function() {
 
+
         var axis = new THREE.Vector3(),
             quaternion = new THREE.Quaternion(),
             eyeDirection = new THREE.Vector3(),
@@ -186,11 +187,26 @@ THREE.TrackballControls = function ( object, domElement ) {
 
             } else if ( ! _this.staticMoving && _lastAngle ) {
 
-                _lastAngle *= Math.sqrt( 1.0 - _this.dynamicDampingFactor );
+                _lastAngle *= Math.sqrt( 1.0 - _this.dynamicDampingFactor );;
                 _eye.copy( _this.object.position ).sub( _this.target );
                 quaternion.setFromAxisAngle( _lastAxis, _lastAngle );
+
                 _eye.applyQuaternion( quaternion );
                 _this.object.up.applyQuaternion( quaternion );
+
+
+               /* console.log("quaternion  x: " + quaternion.x);
+                console.log("quaternion y: " + quaternion.y);
+                console.log("_last axis x: " + _lastAxis.x);
+                console.log("_last axis y: " + _lastAxis.y);
+                console.log("target value x: " + _this.target.x);
+                console.log("target value y: " + _this.target.y);
+                console.log("lastAngle: " + _lastAngle);
+
+                console.log("_eye prop x: " + _eye.x);
+                console.log("_eye prop y: " + _eye.y);
+                console.log("camera x : " + _this.object.position.x);
+                console.log("camera y: " + _this.object.position.y);*/
 
             }
 
@@ -298,7 +314,7 @@ THREE.TrackballControls = function ( object, domElement ) {
         _eye.subVectors( _this.object.position, _this.target );
 
         if ( ! _this.noRotate ) {
-            console.log("should update all time?");
+            //console.log("should update all time?");
             _this.rotateCamera();
 
         }
@@ -404,9 +420,6 @@ THREE.TrackballControls = function ( object, domElement ) {
         }
 
         if ( _state === STATE.ROTATE && ! _this.noRotate ) {
-            console.log("where art you?");
-            console.log("event page X?:  " + event.pageX);
-            console.log("event page Y?:  " + event.pageY);
             _moveCurr.copy( getMouseOnCircle( event.pageX, event.pageY ) );
             _movePrev.copy( _moveCurr );
 
@@ -429,6 +442,12 @@ THREE.TrackballControls = function ( object, domElement ) {
 
     }
 
+    //TODO should move the object to a specific coordinate
+    function moveToCords (posX,posY) {
+        _movePrev.copy(_moveCurr);
+        _moveCurr.copy(get)
+
+    }
     function mousemove( event ) {
 
         if ( _this.enabled === false ) return;
@@ -439,7 +458,9 @@ THREE.TrackballControls = function ( object, domElement ) {
         if ( _state === STATE.ROTATE && ! _this.noRotate ) {
 
             _movePrev.copy( _moveCurr );
+            console.log(" new vector?:  " + getMouseOnCircle(event.pageX, event.pageY).x);
             _moveCurr.copy( getMouseOnCircle( event.pageX, event.pageY ) );
+
 
         } else if ( _state === STATE.ZOOM && ! _this.noZoom ) {
 
