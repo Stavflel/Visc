@@ -13,10 +13,10 @@
 //    Zoom - middle mouse, or mousewheel / touch: two finger spread or squish
 //    Pan - right mouse, or arrow keys / touch: three finger swipe
 
-THREE.OrbitControls = function ( object, domElement ) {
+THREE.OrbitControls = function ( object, domElement, gui ) {
 
     this.object = object;
-
+    this.gui = ( gui !== undefined ) ? gui : document;
     this.domElement = ( domElement !== undefined ) ? domElement : document;
 
     // Set to false to disable this control
@@ -64,7 +64,7 @@ THREE.OrbitControls = function ( object, domElement ) {
     // Set to true to automatically rotate around the target
     // If auto-rotate is enabled, you must call controls.update() in your animation loop
     this.autoRotate = false;
-    this.autoRotateSpeed = 2.0; // 30 seconds per round when fps is 60
+    this.autoRotateSpeed = 30.0; // 30 seconds per round when fps is 60
 
     // Set to false to disable use of the keys
     this.enableKeys = true;
@@ -215,7 +215,6 @@ THREE.OrbitControls = function ( object, domElement ) {
         };
 
     }();
-
     this.dispose = function () {
 
         scope.domElement.removeEventListener( 'contextmenu', onContextMenu, false );
@@ -225,6 +224,8 @@ THREE.OrbitControls = function ( object, domElement ) {
         scope.domElement.removeEventListener( 'touchstart', onTouchStart, false );
         scope.domElement.removeEventListener( 'touchend', onTouchEnd, false );
         scope.domElement.removeEventListener( 'touchmove', onTouchMove, false );
+
+        scope.domElement.removeEventListener('click', rotateOnGivenPoint, false);
 
         document.removeEventListener( 'mousemove', onMouseMove, false );
         document.removeEventListener( 'mouseup', onMouseUp, false );
@@ -284,15 +285,15 @@ THREE.OrbitControls = function ( object, domElement ) {
     }
 
     function rotateLeft( angle ) {
-        console.log("le angle? : " + angle);
-        console.log("sphericalDelta: " + sphericalDelta.theta);
+      //  console.log("sphericalDelta: " + sphericalDelta.theta);
         sphericalDelta.theta -= angle;
 
     }
 
     function rotateUp( angle ) {
-        console.log("Up angle? : " + angle);
-        console.log(" Up sphericalDelta: " + sphericalDelta.phi);
+
+       // console.log("Up angle? : " + angle);
+       // console.log(" Up sphericalDelta: " + sphericalDelta.phi);
         sphericalDelta.phi -= angle;
 
     }
@@ -437,11 +438,46 @@ THREE.OrbitControls = function ( object, domElement ) {
         panStart.set( event.clientX, event.clientY );
 
     }
+    function rotateOnGivenPoint(event){
+        //console.log("le vector" + event.target.id);
+        if(event.target.id === 'back'){
+            scope.autoRotate = true;
+        }else if(event.target.id === 'side'){
+        }
+    }
+    function rotateToValuesOfNewVector(vector) {
+       // rotateEnd.subVectors(vector, rotateStart);
+        rotateEnd.copy(vector);
+        rotateDelta.subVectors( rotateEnd, rotateStart );
+        var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
 
+        rotateLeft(2 * Math.PI * rotateDelta.x / element.clientWidth * scope.rotateSpeed);
+
+        rotateLeft(2 * Math.PI * rotateDelta.y / element.clientWidth * scope.rotateSpeed);
+
+        rotateStart.copy( rotateEnd );
+
+        scope.update();
+    }
+    function resetToDefaultView() {
+        rotateEnd.set(0,0);
+        rotateDelta.subVectors( rotateEnd, rotateStart );
+        var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
+
+        rotateLeft(2 * Math.PI * rotateDelta.x / element.clientWidth * scope.rotateSpeed);
+
+        rotateLeft(2 * Math.PI * rotateDelta.y / element.clientWidth * scope.rotateSpeed);
+
+        rotateStart.copy( rotateEnd );
+
+        scope.update();
+
+    }
     function handleMouseMoveRotate( event ) {
 
         //console.log( 'handleMouseMoveRotate' );
-
+        /*console.log("event client??. " + event.clientX);
+        console.log("event client??. " + event.clientY);*/
         rotateEnd.set( event.clientX, event.clientY );
         rotateDelta.subVectors( rotateEnd, rotateStart );
 
@@ -906,6 +942,9 @@ THREE.OrbitControls = function ( object, domElement ) {
     scope.domElement.addEventListener( 'touchstart', onTouchStart, false );
     scope.domElement.addEventListener( 'touchend', onTouchEnd, false );
     scope.domElement.addEventListener( 'touchmove', onTouchMove, false );
+
+    scope.gui.getElementById('back').addEventListener('click', rotateOnGivenPoint, false);
+    scope.gui.getElementById('side').addEventListener('click', rotateOnGivenPoint, false);
 
     window.addEventListener( 'keydown', onKeyDown, false );
 

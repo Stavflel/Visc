@@ -162,8 +162,10 @@
         var geometryArray;
         var currentVectorPosition = new THREE.Vector3(0,0,0);
         var setVectorPosition = new THREE.Vector3(0,0,0);
+        var movingCamera;
 
-        var _sphericalDelta = new THREE.Spherical();
+        //Keeps track of all camera views
+        var cameraPositions = [];
 
         ///TODO GET all parts that is going to change the color with color clicked
 		const bodyElements = [
@@ -183,7 +185,7 @@
 		//The vector for each view
 		const defaultViews = {
 		    side: new THREE.Vector3(175,-4,30), //TODO add right vector
-			front: new THREE.Vector3(0,-175,30), //TODO add right vector
+			front: new THREE.Vector3(-8,-187,55), //TODO add right vector
 			back: new THREE.Vector3(0, 165, 30), //TODO add right vector
 			interior: "new" //TODO add right vector
 		};
@@ -218,19 +220,31 @@
             projector = new THREE.Projector();
             mouseVector = new THREE.Vector3();
 
+            //Adding object on camera for colletion detection
+            var cameraCube = new THREE.CubeGeometry(20,20,20,1,1,1);
+            var wireMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe:true});
+            movingCamera = new THREE.Mesh( cameraCube, wireMaterial );
+            movingCamera.position.set(0,0,0);
+
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(45, containerWidth / containerHeight, 1, 1000);
             camera.position.set(0, -20, 2);
+            camera.up.set( 0, 0, 1 );
+
+            //camera initialized
+            //adding movingCamera object to the camera object
+            //for tracking the collisions
             camera.lookAt(scene.position);
+            camera.add(movingCamera);
             scene.add(camera);
 
-            controls = new THREE.TrackballControls(camera, renderer.domElement);
-          // _controls = new THREE.OrbitControls(camera, renderer.domElement);
+            var grid = new THREE.GridHelper(400,400, 0xffffff, 0x555555);
+            scene.add(grid);
+            _controls = new THREE.OrbitControls(camera, renderer.domElement, document);
+            _controls.panSpeed = 0.8;
+            _controls.noPan = false;
 
-         //   _controls.panSpeed = 0.8;
-          //  _controls.noPan = false;
-
-           // axisSystem = new AxisSystem(camera, controls);
+            initaliazeViewCollisions();
 
             var scaleFactor = calculateScaleFactor(boundingBoxMinimum, boundingBoxMaximum);
 
@@ -264,6 +278,7 @@
                             scene.add(mesh);
                             geometryArray[link] = mesh;
                             if ((scene.children.length - 1) == numberOfJSONFiles) {
+                                console.log("how many times?");
                                 fitAll(scene);
                             }
 
@@ -285,7 +300,7 @@
             camera.add(pointLight);
             window.addEventListener("mousemove", onMouseMove, false);
             window.addEventListener("resize", onWindowResize, false);
-            //window.addEventListener("click",onMouseClick,false);
+            _controls.addEventListener('change', render);
 			addListenersToColors();
             function addListenersToColors() {
                 document.getElementById("colorWhite").addEventListener("click",colorClicked);
@@ -296,8 +311,42 @@
                 document.getElementById("back").addEventListener("click", setNewDefaultView);
                 document.getElementById("side").addEventListener("click", setNewDefaultView);
             }
+
         }
 
+        // Set collision for the camera views for rotating effect
+        function initaliazeViewCollisions(){
+
+            //SIDES COLLISIONS DETECTION
+            var cube = new THREE.CubeGeometry(containerWidth/2,2,containerHeight/2,2,2,2);
+            var rayMaterial = new THREE.MeshBasicMaterial({color: 0x8888ff});
+
+            var viewOne = new THREE.Mesh(cube,rayMaterial);
+            viewOne.position.set(-200,0,0);
+            viewOne.rotation.y = Math.PI/2;
+            scene.add(viewOne);
+            cameraPositions.push(viewOne);
+
+            var viewTwo = new THREE.Mesh(cube,rayMaterial);
+            viewTwo.position.set(200,0,0);
+            viewTwo.rotation.y = Math.PI/2;
+            scene.add(viewTwo);
+            cameraPositions.push(viewTwo);
+
+            //BACK AND FRONT CAMERA COLLISIONS DETECTION
+            var frontCube = new THREE.CubeGeometry(containerHeight/2,containerWidth/2,2,2,2,2,2)
+            var viewThree = new THREE.Mesh(frontCube,rayMaterial);
+            viewThree.position.set(0,150,0);
+            viewThree.rotation.y = Math.PI/2;
+            scene.add(viewThree);
+            cameraPositions.push(viewThree);
+
+            var viewFour = new THREE.Mesh(frontCube,rayMaterial);
+            viewFour.position.set(0,-150,0);
+            viewFour.rotation.y = Math.PI/2;
+            scene.add(viewFour);
+            cameraPositions.push(viewFour);
+        }
         //TODO get all ids that going to change on a click
         function colorClicked(event){
 			for(var i = 0; i < bodyElements.length; i+=1){
@@ -310,24 +359,16 @@
 		function setNewDefaultView(event) {
             if(event.target.id === 'back'){
                 console.log("Lolish clickish?");
-                camera.rotateOnAxis(defaultViews.side,getAngleToPosition());
-                camera.lookAt(defaultViews.side);
-                controls.autoRotate = true;
+               // _controls.autoRotate = true;
+               // var vector = new THREE.Vector2(347,251);
+               // _controls.rotateOnGivenPoint(vector);
 
             }else if(event.target.id === 'side') {
                 console.log("le click side?? ");
                 //_controls.target.set(defaultViews.side);
             }
         }
-		///variables to use
-		//camera.position.x or camera.position.y
-		//find center of gravity
-		//place it in lookAt
-		function onCameraViewClicked(){
-            //camera.rotation.y = 90 * Math.PI / 180;
 
-
-		}
         function onWindowResize(resizeEvent){
             renderer.setSize(container.clientWidth, container.clientHeight);
             camera.aspect = container.clientWidth / container.clientHeight;
@@ -340,34 +381,12 @@
             mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
         }
 
-        // change color on click
-        /**
-         * it does not work on all ids, but it is just a prototype
-         * it will not be used  in the end product just
-         * for testing.
-         * */
-        function onMouseClick(event){
-            event.preventDefault();
-            mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-            mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-            raycaster.setFromCamera(mouse,camera);
-            console.log(raycaster.intersectObjects( scene.children ).length);
-            var intersects = raycaster.intersectObjects(scene.children,true);
-            if ( intersects.length > 0 ) {
-                for(var i = 0; i  < intersects.length, i+=1;){
-                    if(typeof intersects[i].object !== 'undefined'){
-                        var object = intersects[i].object;
-                        console.log("le object  " + object.name);
-                        geometryArray[object.name].material.color.setHex(0xffffff );
-                        break;
-                    }
-                }
-            } else {
-                //if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
-                INTERSECTED = null;
-
-            }
+        //TODO add rotation around x axis only
+        function setForOnlyNavigationAroundXAxis() {
+            _controls.minPolarAngle = Math.PI;
+            _controls.maxPolarAngle = Math.PI/2;
         }
+
 
         /**
          * Scale each mesh based on vertexs in each json that being loaded.
@@ -396,20 +415,17 @@
         function fitAll(node){
             // Calculate bounding box of the whole scene
             var boundingBoxOfNode = new THREE.Box3().setFromObject(node);
-
-            // Refocus camera the center of the given object
             var centerOfGravity = boundingBoxOfNode.center();
             var newCameraPosition = new THREE.Vector3();
-         //   console.log("le controls?? " + _controls.target);
-            newCameraPosition.subVectors(centerOfGravity, controls.target);
+            newCameraPosition.subVectors(centerOfGravity, _controls.target);
             camera.position.addVectors(camera.position, newCameraPosition);
             camera.lookAt(centerOfGravity);
-            controls.target.set(centerOfGravity.x, centerOfGravity.y, centerOfGravity.z);
+            _controls.target.set(centerOfGravity.x, centerOfGravity.y, centerOfGravity.z);
 
             // Move camera along z until the object fits into the screen
             var sphereSize = boundingBoxOfNode.size().length() * 0.5;
             var distToCenter = sphereSize / Math.sin(Math.PI / 180.0 * camera.fov * 0.5);
-            var target = controls.target;
+            var target = _controls.target;
             var vec = new THREE.Vector3();
             vec.subVectors(camera.position, target);
             vec.setLength(distToCenter);
@@ -417,9 +433,9 @@
         }
 
         function animateScene(){
-            controls.update();
-           // axisSystem.animate();
+            _controls.update();
             requestAnimationFrame(animateScene);
+            console.log("mannen_?");
             renderScene();
         }
         function renderScene(){
@@ -428,28 +444,34 @@
         //    axisSystem.render();
         }
         function render() {
-          //  console.log("ehh jaa?" + camera.position.y);
             camera.updateMatrixWorld();
-            var vector = camera.position.clone();
             currentVectorPosition.set(camera.position.x, camera.position.y, camera.position.z);
+            checkCollision();
             raycaster.setFromCamera(mouse,camera);
             renderer.render(scene, camera);
         }
 
-        function getAngleToPosition() {
-            return defaultViews.back.angleTo(currentVectorPosition);
+        //TODO fix ray cast so it only hits one time at the intersection point
+        function checkCollision(){
+            raycaster.setFromCamera( currentVectorPosition, camera );
+            // calculate objects intersecting the picking ray
+            var intersects = raycaster.intersectObjects( cameraPositions, true );
+            if(intersects.length > 0){
+                for(var j = 0; j < cameraPositions.length; j += 1) {
+                    for (var i = 0; i < intersects.length; i += 1) {
+                        if (intersects[i] !== undefined) {
+                            if(cameraPositions[j] === intersects[i].object){
+                                cameraPositions[j].material.color.set( 0xff0000 );
+                                _controls.autoRotate = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
         }
-        function _getAutoRotationAngle() {
 
-            return 2 * Math.PI / 60 / 60 * 2.0;
-
-        }
-
-        function _rotateLeft( angle ) {
-
-            _sphericalDelta.theta -= angle;
-
-        }
 
         /***
          * Handle the side bar click events remove parts when
