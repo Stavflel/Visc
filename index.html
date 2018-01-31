@@ -29,6 +29,12 @@
 	<script src="js/Detector.js"></script>
 	<script src="AxisSystem.js"></script>
 	<script src="CDPlayer.jt.json/models.js"></script>
+  	<script src="cover.jt.json/models.js"></script>
+	<script src="coverback.jt.json/models.js"></script>
+	<script src="coverbacklowres.jt.json/models.js"></script>
+	<script src="coverlowres.jt.json/models.js"></script>
+	<script src="coverremovallowres.jt.json/models.js"></script>
+	<script src="coverlowestres.jt.json/models.js"></script>
 	<script src="TrackballControls.js"></script>
 	<script src="CanvasRenderer.js"></script>
 	<script src="Projector.js"></script>
@@ -154,6 +160,9 @@
 
 	<script>
 
+
+		//TODO remove that ur able to stop rotation on change camera view animation
+
         var scene;
         var camera;
         var controls;
@@ -163,9 +172,13 @@
         var currentVectorPosition = new THREE.Vector3(0,0,0);
         var setVectorPosition = new THREE.Vector3(0,0,0);
         var movingCamera;
+        var viewFour;
+
+        //Set to true to show the collision walls for each camera view
+        var showCollision = false;
 
         //Keeps track of all camera views
-        var cameraPositions = [];
+        var cameraPositions;
 
         ///TODO GET all parts that is going to change the color with color clicked
 		const bodyElements = [
@@ -194,6 +207,7 @@
         //New patched framework for raycaster in three.js now working
         //with jtviewer
         var raycaster = new THREE.Raycaster();
+        var newCaster = new THREE.Raycaster();
         var mouse = new THREE.Vector2(), INTERSECTED;
         initializeScene();
 
@@ -209,7 +223,9 @@
                 return;
             }
             raycaster = new THREE.Raycaster();
+            newCaster = new THREE.Raycaster();
             container = document.getElementById("container");
+
             containerWidth = container.clientWidth;
             containerHeight = container.clientHeight;
             renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
@@ -228,73 +244,38 @@
 
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(45, containerWidth / containerHeight, 1, 1000);
-            camera.position.set(0, -20, 2);
+            camera.position.set(0, -20, 200);
             camera.up.set( 0, 0, 1 );
 
             //camera initialized
             //adding movingCamera object to the camera object
             //for tracking the collisions
             camera.lookAt(scene.position);
-            camera.add(movingCamera);
+            //camera.add(movingCamera);
             scene.add(camera);
 
             var grid = new THREE.GridHelper(400,400, 0xffffff, 0x555555);
-            scene.add(grid);
+             scene.add(grid);
             _controls = new THREE.OrbitControls(camera, renderer.domElement, document);
             _controls.panSpeed = 0.8;
             _controls.noPan = false;
 
-            initaliazeViewCollisions();
-
-            var scaleFactor = calculateScaleFactor(boundingBoxMinimum, boundingBoxMaximum);
+            initializeViewCollisions();
 
             geometryArray = new Object();
 
+            //CD player
+			loadJSON(jsonFileNames,numberOfJSONFiles,boundingBoxMinimum,boundingBoxMaximum);
+            //Low resolution
+           /* loadJSON(jsonFileNamesCoverbackLowres,numberOfJSONFilesCoverbackLowres,
+				boundingBoxMinimumCoverbackLowres,boundingBoxMaximumCoverbackLowres);
+            loadJSON(jsonFileNamesCoverLowestRes,numberOfJSONFilesCoverLowestRes,
+				boundingBoxMinimumCoverLowestRes,boundingBoxMaximumCoverLowestRes);*/
 
-            var loader = new THREE.JSONLoader();
-            /**
-             * Loads le json files and add a reff id _jsonLink
-             * to each mesh name, so It can be trace when something is gonna
-             * be changed with that specific mesh
-             *
-             * XD:D:D:
-             * */
-            for(var _json in jsonFileNames) {
-                //  console.log("layerlink" + jsonFileNames[_json]);
-                var _jsonLink = jsonFileNames[_json];
-                (function (link) {
-                    loader.load(
-                        // resource URL
-                        _json,
-                        // onLoad callback
-                        function (geometry, materials) {
-                            // console.log("jaja" + link);
-                            var mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
-                                color: 0xff0000,
-                                side: THREE.DoubleSide
-                            }));
-                            mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
-                            mesh.name = link;
-                            scene.add(mesh);
-                            geometryArray[link] = mesh;
-                            if ((scene.children.length - 1) == numberOfJSONFiles) {
-                                console.log("how many times?");
-                                fitAll(scene);
-                            }
+            //Original resolution a bit laggy
+            //loadJSON(jsonFileNameCover, numberOfJSONFilesCover,boundingBoxMinimumCover,boundingBoxMaximumCover);
+			//loadJSON(jsonFileNameCoverback,numberOfJSONFilesCoverback,boundingBoxMinimumCoverback,boundingBoxMaximumCoverback);
 
-                        },
-                        // onProgress callback
-                        function (xhr) {
-                            //      console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-                        },
-
-                        // onError callback
-                        function (err) {
-                            //    console.log('An error happened');
-                        }
-                    );
-                })(_jsonLink);
-            }
             pointLight = new THREE.PointLight(0xffffff, 1.0);
             pointLight.position.copy(camera.position);
             camera.add(pointLight);
@@ -313,39 +294,101 @@
             }
 
         }
+        function loadJSON(jsonFileNames, numberOfJSONFiles, boundingBoxMinimum,boundingBoxMaximum) {
+            var scaleFactor = calculateScaleFactor(boundingBoxMinimum, boundingBoxMaximum);
+            var loader = new THREE.JSONLoader();
+            /**
+             * Loads le json files and add a reff id _jsonLink
+             * to each mesh name, so It can be trace when something is gonna
+             * be changed with that specific mesh
+             *
+             * XD:D:D:
+             * */
+            for(var _json in jsonFileNames) {
+              //  console.log("layerlink" + jsonFileNames[_json]);
+                var _jsonLink = jsonFileNames[_json];
+                (function (link) {
+                    loader.load(
+                        // resource URL
+                        _json,
+                        // onLoad callback
+                        function (geometry, materials) {
+                            // console.log("jaja" + link);
+                            var mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
+                                side: THREE.DoubleSide
+                            }));
+                            mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
+                            mesh.name = link;
+                            scene.add(mesh);
+                            geometryArray[link] = mesh;
+                            if ((scene.children.length - 1) == numberOfJSONFiles) {
+                                fitAll(scene);
+                            }
+
+                        },
+                        // onProgress callback
+                        function (xhr) {
+                      //      console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+                        },
+
+                        // onError callback
+                        function (err) {
+                    //        console.log('An error happened');
+                        }
+                    );
+                })(_jsonLink);
+            }
+        }
 
         // Set collision for the camera views for rotating effect
-        function initaliazeViewCollisions(){
+        function initializeViewCollisions(){
+            cameraPositions = new Object();
 
             //SIDES COLLISIONS DETECTION
-            var cube = new THREE.CubeGeometry(containerWidth/2,2,containerHeight/2,2,2,2);
+            var cubeSideOne = new THREE.CubeGeometry(containerWidth,2,containerHeight,2,2,2);
             var rayMaterial = new THREE.MeshBasicMaterial({color: 0x8888ff});
 
-            var viewOne = new THREE.Mesh(cube,rayMaterial);
-            viewOne.position.set(-200,0,0);
+            var viewOne = new THREE.Mesh(cubeSideOne,rayMaterial);
+            viewOne.position.set(-300,0,0);
             viewOne.rotation.y = Math.PI/2;
+            viewOne.name = 'viewOne';
+            viewOne.material.visible = showCollision;
             scene.add(viewOne);
-            cameraPositions.push(viewOne);
+            cameraPositions['viewOne'] = viewOne;
 
-            var viewTwo = new THREE.Mesh(cube,rayMaterial);
-            viewTwo.position.set(200,0,0);
+            var cubeSideTwo = new THREE.CubeGeometry(containerWidth,2,containerHeight,2,2,2);
+            var rayMaterialSideTwo = new THREE.MeshBasicMaterial({color: 0x8888ff});
+            var viewTwo = new THREE.Mesh(cubeSideTwo, rayMaterialSideTwo);
+            viewTwo.position.set(300,0,0);
             viewTwo.rotation.y = Math.PI/2;
+            viewTwo.name = 'viewTwo';
+            viewTwo.material.visible = showCollision;
             scene.add(viewTwo);
-            cameraPositions.push(viewTwo);
+            cameraPositions['viewTwo'] = viewTwo;
 
             //BACK AND FRONT CAMERA COLLISIONS DETECTION
-            var frontCube = new THREE.CubeGeometry(containerHeight/2,containerWidth/2,2,2,2,2,2)
-            var viewThree = new THREE.Mesh(frontCube,rayMaterial);
-            viewThree.position.set(0,150,0);
+            var backCube = new THREE.CubeGeometry(containerHeight,containerWidth,2,2,2,2);
+            var rayMaterialBack = new THREE.MeshBasicMaterial({color: 0x8888ff});
+            var viewThree = new THREE.Mesh(backCube,rayMaterialBack );
+            viewThree.position.set(0,300,0);
             viewThree.rotation.y = Math.PI/2;
+            viewThree.name = 'viewThree';
+            viewThree.material.visible = showCollision;
             scene.add(viewThree);
-            cameraPositions.push(viewThree);
+            cameraPositions['viewThree'] = viewThree;
 
-            var viewFour = new THREE.Mesh(frontCube,rayMaterial);
-            viewFour.position.set(0,-150,0);
+            var frontCube = new THREE.CubeGeometry(containerHeight,containerWidth,2,2,2,2);
+            var rayMaterialFront = new THREE.MeshBasicMaterial({color: 0x8888ff});
+            viewFour = new THREE.Mesh(frontCube,rayMaterialFront  );
+            viewFour.position.set(0,-300, 0);
             viewFour.rotation.y = Math.PI/2;
+            viewFour.name = 'viewFour';
+            viewFour.material.visible = showCollision;
             scene.add(viewFour);
-            cameraPositions.push(viewFour);
+            cameraPositions['viewFour'] = viewFour;
+
+            console.log("check is it a mesh= " + cameraPositions['viewFour'].isMesh);
+
         }
         //TODO get all ids that going to change on a click
         function colorClicked(event){
@@ -435,49 +478,42 @@
         function animateScene(){
             _controls.update();
             requestAnimationFrame(animateScene);
-            console.log("mannen_?");
             renderScene();
         }
         function renderScene(){
             render();
             renderer.render(scene, camera);
-        //    axisSystem.render();
         }
         function render() {
             camera.updateMatrixWorld();
             currentVectorPosition.set(camera.position.x, camera.position.y, camera.position.z);
             checkCollision();
-            raycaster.setFromCamera(mouse,camera);
             renderer.render(scene, camera);
         }
-
         //TODO fix ray cast so it only hits one time at the intersection point
         function checkCollision(){
-            raycaster.setFromCamera( currentVectorPosition, camera );
-            // calculate objects intersecting the picking ray
-            var intersects = raycaster.intersectObjects( cameraPositions, true );
+            //Add a zero plane which cast from the current
+			//camera direction towards the center of gravity
+            var zeroPlane = new THREE.Vector3(0,0,0);
+            raycaster.setFromCamera( zeroPlane, camera);
+            var intersects = raycaster.intersectObjects(scene.children);
             if(intersects.length > 0){
-                for(var j = 0; j < cameraPositions.length; j += 1) {
-                    for (var i = 0; i < intersects.length; i += 1) {
-                        if (intersects[i] !== undefined) {
-                            if(cameraPositions[j] === intersects[i].object){
-                                cameraPositions[j].material.color.set( 0xff0000 );
-                                _controls.autoRotate = false;
-                                break;
-                            }
-                        }
-                    }
-                }
+				for (var i = 0; i < intersects.length; i += 1) {
+					if (intersects[i] !== undefined) {
+						if(intersects[ i ].object.name  ===  ('viewFour') && i !== 0){ //Back view
+						    console.log("lol??" + i);
+						}else if( intersects[ i ].object.name === ('viewThree') && i !== 0){ //Front view
+						  	console.log("Hit view three: " + i);
+                            _controls.autoRotate = false;
+                        }else if(intersects[ i ].object.name === ('viewTwo') && i !== 0){ // Side left view
+                            console.log("Hit view two: " + i);
+						}else if(intersects[ i ].object.name === ('viewOne') && i !== 0){ // Side right view
+                            console.log("Hit view one: " + i);
+						}
+					}
+				}
             }
-
         }
-
-
-        /***
-         * Handle the side bar click events remove parts when
-         * box is clicked as off
-         * */
-
 	</script>
   </body>
 </html>
