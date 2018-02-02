@@ -173,6 +173,7 @@
         var setVectorPosition = new THREE.Vector3(0,0,0);
         var movingCamera;
         var viewFour;
+        var DISTANCE_TO_ZERO_PLANE = 190;
 
         //Set to true to show the collision walls for each camera view
         var showCollision = false;
@@ -180,10 +181,21 @@
         //Keeps track of all camera views
         var cameraPositions;
 
+        //camera nav variables
+        var VIEW_STATES = {
+            viewOne: false,
+			viewTwo: false,
+			viewThree: false,
+			viewFour: false
+		};
+
+        var targetPosition;
         ///TODO GET all parts that is going to change the color with color clicked
 		const bodyElements = [
             'Ejector Door [12] (2)'
 		];
+
+		var objects = [];
 
 		//Programming color values
 		const colors = {
@@ -195,13 +207,35 @@
             colorAqua: 0x00ffff
 		};
 
-		//The vector for each view
-		const defaultViews = {
-		    side: new THREE.Vector3(175,-4,30), //TODO add right vector
-			front: new THREE.Vector3(-8,-187,55), //TODO add right vector
-			back: new THREE.Vector3(0, 165, 30), //TODO add right vector
-			interior: "new" //TODO add right vector
-		};
+        /*
+            *
+            * Front då är x 0 eller litet ifall borde vara noll
+            * y är negative för front z har högt värde
+            * bra vector är new THREE.Vector3(0,-174,250);
+            *
+            * Back då är x 0
+            * y är positiv z har högt värde
+            * bra vector är new THREE.Vector3(0, 176,250);
+            *
+            * Side ett
+            * Då är y 0
+            * x har högt värde, z är positiv
+            * bra vector new THREE.Vector3(0,177,66);
+            *
+            *
+            * Side två
+            * Då är y 0
+            * x har högt värde negativ, z är positiv
+            *
+            * bra vector new THREE.Vector3(0,-177,66);
+            * */
+        const defaultViews = {
+            side: new THREE.Vector3(177,0,66),
+            sideTwo: new THREE.Vector3(-177,0,66),
+            front: new THREE.Vector3(0,-174,66),
+            back: new THREE.Vector3(0, 176,66),
+            interior: "new" //TODO add right vector
+        };
 
 
         //New patched framework for raycaster in three.js now working
@@ -244,7 +278,7 @@
 
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(45, containerWidth / containerHeight, 1, 1000);
-            camera.position.set(0, -20, 200);
+            camera.position.set(0, -20, 100);
             camera.up.set( 0, 0, 1 );
 
             //camera initialized
@@ -255,8 +289,8 @@
             scene.add(camera);
 
             var grid = new THREE.GridHelper(400,400, 0xffffff, 0x555555);
-             scene.add(grid);
-            _controls = new THREE.OrbitControls(camera, renderer.domElement, document);
+          //   scene.add(grid);
+            _controls = new THREE.OrbitControls(camera, renderer.domElement, document, defaultViews);
             _controls.panSpeed = 0.8;
             _controls.noPan = false;
 
@@ -345,7 +379,7 @@
             cameraPositions = new Object();
 
             //SIDES COLLISIONS DETECTION
-            var cubeSideOne = new THREE.CubeGeometry(containerWidth,2,containerHeight,2,2,2);
+            var cubeSideOne = new THREE.CubeGeometry(containerWidth,4,containerHeight,4,4,4);
             var rayMaterial = new THREE.MeshBasicMaterial({color: 0x8888ff});
 
             var viewOne = new THREE.Mesh(cubeSideOne,rayMaterial);
@@ -353,37 +387,41 @@
             viewOne.rotation.y = Math.PI/2;
             viewOne.name = 'viewOne';
             viewOne.material.visible = showCollision;
+            objects.push(viewOne);
             scene.add(viewOne);
             cameraPositions['viewOne'] = viewOne;
 
-            var cubeSideTwo = new THREE.CubeGeometry(containerWidth,2,containerHeight,2,2,2);
+            var cubeSideTwo = new THREE.CubeGeometry(containerWidth,4,containerHeight,4,4,4);
             var rayMaterialSideTwo = new THREE.MeshBasicMaterial({color: 0x8888ff});
             var viewTwo = new THREE.Mesh(cubeSideTwo, rayMaterialSideTwo);
             viewTwo.position.set(300,0,0);
             viewTwo.rotation.y = Math.PI/2;
             viewTwo.name = 'viewTwo';
             viewTwo.material.visible = showCollision;
+            objects.push(viewTwo);
             scene.add(viewTwo);
             cameraPositions['viewTwo'] = viewTwo;
 
             //BACK AND FRONT CAMERA COLLISIONS DETECTION
-            var backCube = new THREE.CubeGeometry(containerHeight,containerWidth,2,2,2,2);
+            var backCube = new THREE.CubeGeometry(containerHeight,containerWidth,4,4,4,4);
             var rayMaterialBack = new THREE.MeshBasicMaterial({color: 0x8888ff});
             var viewThree = new THREE.Mesh(backCube,rayMaterialBack );
             viewThree.position.set(0,300,0);
             viewThree.rotation.y = Math.PI/2;
             viewThree.name = 'viewThree';
             viewThree.material.visible = showCollision;
+            objects.push(viewThree);
             scene.add(viewThree);
             cameraPositions['viewThree'] = viewThree;
 
-            var frontCube = new THREE.CubeGeometry(containerHeight,containerWidth,2,2,2,2);
+            var frontCube = new THREE.CubeGeometry(containerHeight,containerWidth,4,4,4,4);
             var rayMaterialFront = new THREE.MeshBasicMaterial({color: 0x8888ff});
             viewFour = new THREE.Mesh(frontCube,rayMaterialFront  );
             viewFour.position.set(0,-300, 0);
             viewFour.rotation.y = Math.PI/2;
             viewFour.name = 'viewFour';
             viewFour.material.visible = showCollision;
+            objects.push(viewFour);
             scene.add(viewFour);
             cameraPositions['viewFour'] = viewFour;
 
@@ -393,24 +431,51 @@
         //TODO get all ids that going to change on a click
         function colorClicked(event){
 			for(var i = 0; i < bodyElements.length; i+=1){
-			    if(bodyElements[i] !== undefined){
-					geometryArray[bodyElements[i]].material.color.setHex(colors[event.target.id] );
+			    if( bodyElements[i] !== undefined ){
+					geometryArray[bodyElements[i]].material.color.setHex( colors[event.target.id] );
 					break;
 				}
 			}
 		}
 		function setNewDefaultView(event) {
-            if(event.target.id === 'back'){
-                console.log("Lolish clickish?");
-               // _controls.autoRotate = true;
-               // var vector = new THREE.Vector2(347,251);
-               // _controls.rotateOnGivenPoint(vector);
+            if( event.target.id === 'back' ){
+                if( VIEW_STATES.viewThree !== true ){
+                    //clear state first
+					/*clearStates();
 
-            }else if(event.target.id === 'side') {
-                console.log("le click side?? ");
-                //_controls.target.set(defaultViews.side);
+
+                    _controls.autoRotate = true;
+					VIEW_STATES.viewThree = true;
+                    targetPosition = 'viewThree';*/
+				}
+            }else if( event.target.id === 'side' ) {
+                if( VIEW_STATES.viewTwo !== true ){
+
+                    //clear state first
+                    clearStates();
+
+                    //All values for navigation phase
+                   _controls.autoRotate = true;
+                    VIEW_STATES.viewTwo = true;
+                   // targetPosition = 'viewTwo';
+				}
+            } else if( event.target.id === 'front' ) {
+                if( VIEW_STATES.viewFour !== true ){
+                    //clear state first
+                  /*  clearStates();
+
+                    _controls.autoRotate = true;
+                    VIEW_STATES.viewFour = true;
+                    targetPosition = 'viewFour';*/
+                }
             }
         }
+
+        function clearStates(){
+            for(var key in VIEW_STATES){
+				VIEW_STATES[key] = false;
+			}
+		}
 
         function onWindowResize(resizeEvent){
             renderer.setSize(container.clientWidth, container.clientHeight);
@@ -487,31 +552,93 @@
         function render() {
             camera.updateMatrixWorld();
             currentVectorPosition.set(camera.position.x, camera.position.y, camera.position.z);
+            _controls.updateCurrent3DVector(currentVectorPosition);
             checkCollision();
             renderer.render(scene, camera);
         }
+
+        function rotateOnGivenPoint(event){
+            //console.log("le vector" + event.target.id);
+            if(event.target.id === 'back'){
+                scope.autoRotate = true;
+            }else if(event.target.id === 'side'){
+            }
+        }
+		function currentVectorGreaterThen(_from, _to) {
+            console.log("greater then");
+			return _from.angleTo(_to);
+        }
+        function currentVectorLowerThen(_from, _to){
+            console.log("lower then");
+            return _from.angleTo(_to);
+		}
         //TODO fix ray cast so it only hits one time at the intersection point
         function checkCollision(){
             //Add a zero plane which cast from the current
 			//camera direction towards the center of gravity
+            console.log("le currentvector x: " + currentVectorPosition.x);
+            console.log("le currentvector y: " + currentVectorPosition.y);
+			console.log("le currentvector z: " + currentVectorPosition.z);
             var zeroPlane = new THREE.Vector3(0,0,0);
-            raycaster.setFromCamera( zeroPlane, camera);
-            var intersects = raycaster.intersectObjects(scene.children);
-            if(intersects.length > 0){
-				for (var i = 0; i < intersects.length; i += 1) {
-					if (intersects[i] !== undefined) {
-						if(intersects[ i ].object.name  ===  ('viewFour') && i !== 0){ //Back view
-						    console.log("lol??" + i);
-						}else if( intersects[ i ].object.name === ('viewThree') && i !== 0){ //Front view
-						  	console.log("Hit view three: " + i);
-                            _controls.autoRotate = false;
-                        }else if(intersects[ i ].object.name === ('viewTwo') && i !== 0){ // Side left view
-                            console.log("Hit view two: " + i);
-						}else if(intersects[ i ].object.name === ('viewOne') && i !== 0){ // Side right view
-                            console.log("Hit view one: " + i);
-						}
-					}
-				}
+            raycaster.setFromCamera(zeroPlane, camera);
+
+			//TODO FIX SO THAT DISTANCE IS CLOSER WHEN x or y is high value?
+			//Rotate down
+			//TODO Set using rotating and navigating while changing view impossible
+			if(VIEW_STATES.viewTwo === true) {
+				moveToViewTwo(zeroPlane);
+			}
+        }
+
+		//TODO STILL SOME BUGS NEED TO FIX
+        /**
+		 *
+		 * First check if x is positive to move to the choosen side
+		 * Then find the angle of z using vector position of z
+		 * Then check if the y axel is close to zero need to be bigger then
+		 * zero becuse the rotation angle is kinda high
+		 * //COULD DO change the rotation angle to smaller value but will lag I guess?
+		 * //or change the rotation speed to a lower value will work
+		 * Still this works really good.
+		 *
+		 * @param zeroPlane the center of gravity could initialize as a global variable
+		 * */
+        function moveToViewTwo(zeroPlane) {
+            if (currentVectorPosition.x > 0) {
+                if (currentVectorPosition.z > 66) {
+                    _controls.updateRotationUp('down');
+                } else if (currentVectorPosition.z < 40) {
+                    _controls.updateRotationUp('up');
+                }else if (currentVectorPosition.y < 10 && currentVectorPosition.y > 0){
+                    _controls.autoRotate = false;
+                    clearStates();
+                }
+            }
+            if (currentVectorPosition.distanceTo(zeroPlane) > DISTANCE_TO_ZERO_PLANE + 10) {
+                _controls.updateZoom('out');
+            }
+            else if (currentVectorPosition.distanceTo(zeroPlane) < DISTANCE_TO_ZERO_PLANE - 10) {
+                _controls.updateZoom('in');
+            }
+        }
+
+        //TODO follow the guidelines of moveviewTwo and apply to a new vector the viewThree vector jippi :D
+        function moveToViewThree(zeroPlane) {
+            if (currentVectorPosition.x > 0) {
+                if (currentVectorPosition.z > 66) {
+                    _controls.updateRotationUp('down');
+                } else if (currentVectorPosition.z < 50) {
+                    _controls.updateRotationUp('up');
+                }else if (currentVectorPosition.y < 20 && currentVectorPosition.y > 0){
+                    _controls.autoRotate = false;
+                    clearStates();
+                }
+            }
+            if (currentVectorPosition.distanceTo(zeroPlane) > DISTANCE_TO_ZERO_PLANE + 10) {
+                _controls.updateZoom('out');
+            }
+            else if (currentVectorPosition.distanceTo(zeroPlane) < DISTANCE_TO_ZERO_PLANE - 10) {
+                _controls.updateZoom('in');
             }
         }
 	</script>

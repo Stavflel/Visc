@@ -13,8 +13,10 @@
 //    Zoom - middle mouse, or mousewheel / touch: two finger spread or squish
 //    Pan - right mouse, or arrow keys / touch: three finger swipe
 
-THREE.OrbitControls = function ( object, domElement, gui ) {
+THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
 
+    this._defaultViews = defaultViews;
+    this.cameraVector = new THREE.Vector3();
     this.object = object;
     this.gui = ( gui !== undefined ) ? gui : document;
     this.domElement = ( domElement !== undefined ) ? domElement : document;
@@ -66,6 +68,16 @@ THREE.OrbitControls = function ( object, domElement, gui ) {
     this.autoRotate = false;
     this.autoRotateSpeed = 30.0; // 30 seconds per round when fps is 60
 
+    //My values
+    this.VIEW_STATE = {
+      viewOne: false,
+      viewTwo: false,
+      viewThree: false,
+      viewFour: false
+    };
+
+    //My rotation
+
     // Set to false to disable use of the keys
     this.enableKeys = true;
 
@@ -83,6 +95,10 @@ THREE.OrbitControls = function ( object, domElement, gui ) {
     //
     // public methods
     //
+
+    this.updateCurrent3DVector = function (vector) {
+        this.cameraVector = vector;
+    };
 
     this.getPolarAngle = function () {
 
@@ -118,7 +134,27 @@ THREE.OrbitControls = function ( object, domElement, gui ) {
         state = STATE.NONE;
 
     };
+    this.updateZoom = function (condition) {
+        switch (condition){
+            case 'in' :
+                dollyIn(getZoomScale());
+                break;
+            case 'out' :
+                dollyOut(getZoomScale());
+                break;
+            default:
+        }
+    };
+    this.updateRotationUp = function(angle){
+      //TODO kika på hur dom löste detta i rotateUp
+        //rotateUp(angle);
+        if(angle === 'down'){
+            rotateUp(getAutoRotationAngle()*(-1));
+        }else if(angle === 'up'){
+            rotateUp(getAutoRotationAngle());
+        }
 
+    };
     // this method is exposed, but perhaps it would be better if we can make it private...
     this.update = function () {
 
@@ -291,8 +327,7 @@ THREE.OrbitControls = function ( object, domElement, gui ) {
     }
 
     function rotateUp( angle ) {
-
-       // console.log("Up angle? : " + angle);
+        console.log("Up angle? : " + angle);
        // console.log(" Up sphericalDelta: " + sphericalDelta.phi);
         sphericalDelta.phi -= angle;
 
@@ -372,7 +407,7 @@ THREE.OrbitControls = function ( object, domElement, gui ) {
     function dollyIn( dollyScale ) {
 
         if ( scope.object.isPerspectiveCamera ) {
-
+            console.log("zoom out" + scale);
             scale /= dollyScale;
 
         } else if ( scope.object.isOrthographicCamera ) {
@@ -438,40 +473,18 @@ THREE.OrbitControls = function ( object, domElement, gui ) {
         panStart.set( event.clientX, event.clientY );
 
     }
-    function rotateOnGivenPoint(event){
-        //console.log("le vector" + event.target.id);
-        if(event.target.id === 'back'){
-            scope.autoRotate = true;
-        }else if(event.target.id === 'side'){
+    function rotateToGivenPoint(event) {
+        if(event.target.id === 'side'){
+            console.log("insinde rotatione");
+            console.log("le value of autoroation??: " + (2 * Math.PI / 60 / 60)*scope.autoRotateSpeed);
+            console.log("current vector x: " + scope.cameraVector.x);
+            console.log("current vector y: " + scope.cameraVector.y);
+            console.log("current vector z: " + scope.cameraVector.z);
+            console.log("angle to : " + scope.cameraVector.angleTo(scope._defaultViews.side));
+
+            console.log("le vector position: " + currentVectorPosition.angleTo(defaultViews.side) )
+
         }
-    }
-    function rotateToValuesOfNewVector(vector) {
-       // rotateEnd.subVectors(vector, rotateStart);
-        rotateEnd.copy(vector);
-        rotateDelta.subVectors( rotateEnd, rotateStart );
-        var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
-
-        rotateLeft(2 * Math.PI * rotateDelta.x / element.clientWidth * scope.rotateSpeed);
-
-        rotateLeft(2 * Math.PI * rotateDelta.y / element.clientWidth * scope.rotateSpeed);
-
-        rotateStart.copy( rotateEnd );
-
-        scope.update();
-    }
-    function resetToDefaultView() {
-        rotateEnd.set(0,0);
-        rotateDelta.subVectors( rotateEnd, rotateStart );
-        var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
-
-        rotateLeft(2 * Math.PI * rotateDelta.x / element.clientWidth * scope.rotateSpeed);
-
-        rotateLeft(2 * Math.PI * rotateDelta.y / element.clientWidth * scope.rotateSpeed);
-
-        rotateStart.copy( rotateEnd );
-
-        scope.update();
-
     }
     function handleMouseMoveRotate( event ) {
 
@@ -502,7 +515,6 @@ THREE.OrbitControls = function ( object, domElement, gui ) {
         dollyEnd.set( event.clientX, event.clientY );
 
         dollyDelta.subVectors( dollyEnd, dollyStart );
-
         if ( dollyDelta.y > 0 ) {
 
             dollyIn( getZoomScale() );
@@ -545,6 +557,7 @@ THREE.OrbitControls = function ( object, domElement, gui ) {
 
         // console.log( 'handleMouseWheel' );
 
+        console.log("zoomish??");
         if ( event.deltaY < 0 ) {
 
             dollyOut( getZoomScale() );
@@ -943,8 +956,8 @@ THREE.OrbitControls = function ( object, domElement, gui ) {
     scope.domElement.addEventListener( 'touchend', onTouchEnd, false );
     scope.domElement.addEventListener( 'touchmove', onTouchMove, false );
 
-    scope.gui.getElementById('back').addEventListener('click', rotateOnGivenPoint, false);
-    scope.gui.getElementById('side').addEventListener('click', rotateOnGivenPoint, false);
+    scope.gui.getElementById("side").addEventListener('click', rotateToGivenPoint, false);
+
 
     window.addEventListener( 'keydown', onKeyDown, false );
 
