@@ -174,6 +174,7 @@
         var movingCamera;
         var viewFour;
         var DISTANCE_TO_ZERO_PLANE = 190;
+        var startDistance = 0;
 
         //Set to true to show the collision walls for each camera view
         var showCollision = false;
@@ -325,6 +326,7 @@
                 document.getElementById("colorGrey").addEventListener("click",colorClicked);
                 document.getElementById("back").addEventListener("click", setNewDefaultView);
                 document.getElementById("side").addEventListener("click", setNewDefaultView);
+                document.getElementById("front").addEventListener("click", setNewDefaultView);
             }
 
         }
@@ -437,36 +439,38 @@
 				}
 			}
 		}
+		//TODO Add a state array for current defaultView :)
 		function setNewDefaultView(event) {
             if( event.target.id === 'back' ){
                 if( VIEW_STATES.viewThree !== true ){
+                    stopRotating();
                     //clear state first
-					/*clearStates();
-
-
+					clearStates();
+					startDistance = currentVectorPosition.angleTo(defaultViews.back);
+                    //All values for navigation phase
                     _controls.autoRotate = true;
 					VIEW_STATES.viewThree = true;
-                    targetPosition = 'viewThree';*/
 				}
             }else if( event.target.id === 'side' ) {
                 if( VIEW_STATES.viewTwo !== true ){
-
+                    stopRotating();
                     //clear state first
                     clearStates();
+                    startDistance = currentVectorPosition.angleTo(defaultViews.side);
 
                     //All values for navigation phase
                    _controls.autoRotate = true;
                     VIEW_STATES.viewTwo = true;
-                   // targetPosition = 'viewTwo';
 				}
             } else if( event.target.id === 'front' ) {
                 if( VIEW_STATES.viewFour !== true ){
+                    stopRotating();
                     //clear state first
-                  /*  clearStates();
-
+                    clearStates();
+                    startDistance = currentVectorPosition.angleTo(defaultViews.front);
+                    //All values for navigation phase
                     _controls.autoRotate = true;
                     VIEW_STATES.viewFour = true;
-                    targetPosition = 'viewFour';*/
                 }
             }
         }
@@ -475,6 +479,7 @@
             for(var key in VIEW_STATES){
 				VIEW_STATES[key] = false;
 			}
+			startDistance = 0;
 		}
 
         function onWindowResize(resizeEvent){
@@ -556,41 +561,38 @@
             checkCollision();
             renderer.render(scene, camera);
         }
-
-        function rotateOnGivenPoint(event){
-            //console.log("le vector" + event.target.id);
-            if(event.target.id === 'back'){
-                scope.autoRotate = true;
-            }else if(event.target.id === 'side'){
-            }
-        }
-		function currentVectorGreaterThen(_from, _to) {
-            console.log("greater then");
-			return _from.angleTo(_to);
-        }
-        function currentVectorLowerThen(_from, _to){
-            console.log("lower then");
-            return _from.angleTo(_to);
-		}
         //TODO fix ray cast so it only hits one time at the intersection point
         function checkCollision(){
             //Add a zero plane which cast from the current
 			//camera direction towards the center of gravity
-            console.log("le currentvector x: " + currentVectorPosition.x);
+			/*console.log("le angle to: " + currentVectorPosition.angleTo(defaultViews.side));
+            console.log("le angle to: " + startDistance);
+            console.log("Minus degree: " + (currentVectorPosition.angleTo(defaultViews.side) - startDistance));
+          /*  console.log("le currentvector x: " + currentVectorPosition.x);
             console.log("le currentvector y: " + currentVectorPosition.y);
-			console.log("le currentvector z: " + currentVectorPosition.z);
+			console.log("le currentvector z: " + currentVectorPosition.z);*/
             var zeroPlane = new THREE.Vector3(0,0,0);
             raycaster.setFromCamera(zeroPlane, camera);
 
-			//TODO FIX SO THAT DISTANCE IS CLOSER WHEN x or y is high value?
-			//Rotate down
-			//TODO Set using rotating and navigating while changing view impossible
+            //View state rotation
 			if(VIEW_STATES.viewTwo === true) {
 				moveToViewTwo(zeroPlane);
 			}
+			if(VIEW_STATES.viewThree === true){
+				moveToViewThree(zeroPlane);
+			}
+			if(VIEW_STATES.viewFour === true){
+				moveToViewFour(zeroPlane);
+			}
         }
 
-		//TODO STILL SOME BUGS NEED TO FIX
+        //Stop rotating on both direction
+        function stopRotating() {
+            _controls.autoRotateNegative = false;
+            _controls.autoRotate = false;
+        }
+
+
         /**
 		 *
 		 * First check if x is positive to move to the choosen side
@@ -604,13 +606,18 @@
 		 * @param zeroPlane the center of gravity could initialize as a global variable
 		 * */
         function moveToViewTwo(zeroPlane) {
+            //Change rotation direction based on distance to new vector position
+            if((currentVectorPosition.angleTo(defaultViews.side)  - startDistance) > 0){
+                _controls.autoRotate = false;
+				_controls.autoRotateNegative = true;
+			}
             if (currentVectorPosition.x > 0) {
                 if (currentVectorPosition.z > 66) {
                     _controls.updateRotationUp('down');
                 } else if (currentVectorPosition.z < 40) {
                     _controls.updateRotationUp('up');
                 }else if (currentVectorPosition.y < 10 && currentVectorPosition.y > 0){
-                    _controls.autoRotate = false;
+                    stopRotating();
                     clearStates();
                 }
             }
@@ -622,15 +629,53 @@
             }
         }
 
-        //TODO follow the guidelines of moveviewTwo and apply to a new vector the viewThree vector jippi :D
+		/**
+		 * Viewthree rotation guidelines
+		 * basic info: y should be positive for the plane position
+		 * 				x is the zero value to aline with the back view
+		 * */
         function moveToViewThree(zeroPlane) {
-            if (currentVectorPosition.x > 0) {
-                if (currentVectorPosition.z > 66) {
+            //Change rotation direction based on distance to new vector position
+            if((currentVectorPosition.angleTo(defaultViews.back)  - startDistance) > 0){
+                _controls.autoRotate = false;
+                _controls.autoRotateNegative = true;
+            }
+            if (currentVectorPosition.y > 0) {
+                if (currentVectorPosition.z > 76) {
                     _controls.updateRotationUp('down');
                 } else if (currentVectorPosition.z < 50) {
                     _controls.updateRotationUp('up');
-                }else if (currentVectorPosition.y < 20 && currentVectorPosition.y > 0){
-                    _controls.autoRotate = false;
+                }else if (currentVectorPosition.x < 20 && currentVectorPosition.x > 0){
+                    stopRotating();
+                    clearStates();
+                }
+            }
+            if (currentVectorPosition.distanceTo(zeroPlane) > DISTANCE_TO_ZERO_PLANE + 10) {
+                _controls.updateZoom('out');
+            }
+            else if (currentVectorPosition.distanceTo(zeroPlane) < DISTANCE_TO_ZERO_PLANE - 10) {
+                _controls.updateZoom('in');
+            }
+        }
+
+        /**
+         * Viewthree rotation guidelines
+         * basic info: y should be negative for the plane position
+         * 				x is the zero value to aline with the back view
+         * */
+        function moveToViewFour(zeroPlane) {
+            //Change rotation direction based on distance to new vector position
+            if((currentVectorPosition.angleTo(defaultViews.front)  - startDistance) > 0){
+                _controls.autoRotate = false;
+                _controls.autoRotateNegative = true;
+            }
+            if (currentVectorPosition.y < 0) {
+                if (currentVectorPosition.z > 76) {
+                    _controls.updateRotationUp('down');
+                } else if (currentVectorPosition.z < 50) {
+                    _controls.updateRotationUp('up');
+                }else if (currentVectorPosition.x < 20 && currentVectorPosition.x > 0){
+                    stopRotating();
                     clearStates();
                 }
             }

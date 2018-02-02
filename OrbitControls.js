@@ -66,6 +66,7 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
     // Set to true to automatically rotate around the target
     // If auto-rotate is enabled, you must call controls.update() in your animation loop
     this.autoRotate = false;
+    this.autoRotateNegative = false;
     this.autoRotateSpeed = 30.0; // 30 seconds per round when fps is 60
 
     //My values
@@ -183,6 +184,9 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
 
                 rotateLeft( getAutoRotationAngle() );
 
+            }
+            if( scope.autoRotateNegative && state === STATE.NONE ){
+                rotateLeft( getAutoRotationAngle() * (-1) );
             }
 
             spherical.theta += sphericalDelta.theta;
