@@ -69,14 +69,6 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
     this.autoRotateNegative = false;
     this.autoRotateSpeed = 30.0; // 30 seconds per round when fps is 60
 
-    //My values
-    this.VIEW_STATE = {
-      viewOne: false,
-      viewTwo: false,
-      viewThree: false,
-      viewFour: false
-    };
-
     //My rotation
 
     // Set to false to disable use of the keys

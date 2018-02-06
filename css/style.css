@@ -1,3 +1,12 @@
+#resetButton{
+  position: absolute;
+  z-index: 1000;
+  left: 50%;
+  top: 76%;
+  font-size: 3rem;
+  font-weight: 200;
+  line-height: 1.5;
+}
 .testborder {
     margin:0px;
 	padding:0px;
