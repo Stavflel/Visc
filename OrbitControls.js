@@ -69,7 +69,7 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
     // If auto-rotate is enabled, you must call controls.update() in your animation loop
     this.autoRotate = false;
     this.autoRotateNegative = false;
-    this.autoRotateSpeed = 60.0; // 30 seconds per round when fps is 60
+    this.autoRotateSpeed = 10.0; // 30 seconds per round when fps is 60
 
     //My rotation
 
