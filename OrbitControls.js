@@ -26,6 +26,8 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
 
     // "target" sets the location of focus, where the object orbits around
     this.target = new THREE.Vector3();
+    // "New target" change pivot position of the orbital control //rallmoe das boie
+    this.newTarget = new THREE.Vector3(50,0,15);
 
     // How far you can dolly in and out ( PerspectiveCamera only )
     this.minDistance = 0;
@@ -67,7 +69,7 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
     // If auto-rotate is enabled, you must call controls.update() in your animation loop
     this.autoRotate = false;
     this.autoRotateNegative = false;
-    this.autoRotateSpeed = 30.0; // 30 seconds per round when fps is 60
+    this.autoRotateSpeed = 60.0; // 30 seconds per round when fps is 60
 
     //My rotation
 
@@ -164,7 +166,7 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
 
             var position = scope.object.position;
 
-            offset.copy( position ).sub( scope.target );
+            offset.copy( position ).sub( scope.newTarget );
 
             // rotate offset to "y-axis-is-up" space
             offset.applyQuaternion( quat );
@@ -199,16 +201,18 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
             spherical.radius = Math.max( scope.minDistance, Math.min( scope.maxDistance, spherical.radius ) );
 
             // move target to panned location
-            scope.target.add( panOffset );
+            scope.newTarget.add( panOffset );
 
             offset.setFromSpherical( spherical );
 
             // rotate offset back to "camera-up-vector-is-up" space
             offset.applyQuaternion( quatInverse );
 
-            position.copy( scope.target ).add( offset );
+            position.copy( scope.newTarget ).add( offset );
 
-            scope.object.lookAt( scope.target );
+            //scope.object.lookAt( scope.target );
+            //console.log("??");
+            scope.object.lookAt( scope.newTarget );
 
             if ( scope.enableDamping === true ) {
 
@@ -469,19 +473,6 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
         panStart.set( event.clientX, event.clientY );
 
     }
-    function rotateToGivenPoint(event) {
-        if(event.target.id === 'side'){
-            console.log("insinde rotatione");
-            console.log("le value of autoroation??: " + (2 * Math.PI / 60 / 60)*scope.autoRotateSpeed);
-            console.log("current vector x: " + scope.cameraVector.x);
-            console.log("current vector y: " + scope.cameraVector.y);
-            console.log("current vector z: " + scope.cameraVector.z);
-            console.log("angle to : " + scope.cameraVector.angleTo(scope._defaultViews.side));
-
-            console.log("le vector position: " + currentVectorPosition.angleTo(defaultViews.side) )
-
-        }
-    }
     function handleMouseMoveRotate( event ) {
 
         //console.log( 'handleMouseMoveRotate' );
@@ -553,7 +544,7 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
 
         // console.log( 'handleMouseWheel' );
 
-        console.log("zoomish??");
+        //console.log("zoomish??");
         if ( event.deltaY < 0 ) {
 
             dollyOut( getZoomScale() );
@@ -951,9 +942,6 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
     scope.domElement.addEventListener( 'touchstart', onTouchStart, false );
     scope.domElement.addEventListener( 'touchend', onTouchEnd, false );
     scope.domElement.addEventListener( 'touchmove', onTouchMove, false );
-
-    scope.gui.getElementById("side").addEventListener('click', rotateToGivenPoint, false);
-
 
     window.addEventListener( 'keydown', onKeyDown, false );
 

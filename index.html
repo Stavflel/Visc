@@ -35,6 +35,7 @@
   	<script src="cover.jt.json/models.js"></script>
 	<script src="coverback.jt.json/models.js"></script>
 	<script src="coverbacklowres.jt.json/models.js"></script>
+	<script src="CD132_Ford_buck_jt.jt.json/models.js"></script>
 	<script src="coverlowres.jt.json/models.js"></script>
 	<script src="coverremovallowres.jt.json/models.js"></script>
 	<script src="coverlowestres.jt.json/models.js"></script>
@@ -44,6 +45,7 @@
   	<script src="ViewPort.js"></script>
 	<script src="Projector.js"></script>
     <script src="OrbitControls.js"></script>
+	<script src="stats.min.js"></script>
 
   	<link href="css/bootstrap-directional-buttons.css" rel="stylesheet">
   </head>
@@ -129,6 +131,9 @@
 									<div class="col-md-4 col-sm-4 col-xs-4 testborder" id="back">
 										hej
 									</div>
+									<div class="col-md-4 col-sm-4 col-xs-4 testborder" id="interior">
+										hej
+									</div>
 								</div>
 							</div>
 						</div>
@@ -173,7 +178,7 @@
         var currentVectorPosition = new THREE.Vector3(0,0,0);
         var movingCamera;
         var viewPortController;
-
+        var stats;
         //Keeps track of all camera views
         var RESET_BUTTON_PRESSED = false;
         var reset_Button = document.getElementById("resetButton");
@@ -204,12 +209,28 @@
         setViewPorts();
         initializeScene();
 		function setViewPorts() {
-			viewPorts.push(new THREE.ViewPort(new THREE.Vector3(177,0,66),false,
+		    //Vectors
+			//vector front
+			//
+
+			//vector back
+			//
+
+			//vector side
+			//
+
+			//vector interior
+			//viewPorts.push(new THREE.ViewPort(new THREE.Vector3(50,0,18)));
+			//distance to zeroplane 58
+
+			viewPorts.push(new THREE.ViewPort(new THREE.Vector3(50,-88,40),false,
 				document.getElementById('side')));
-			viewPorts.push(new THREE.ViewPort(new THREE.Vector3(0,-174,66), false,
+			viewPorts.push(new THREE.ViewPort(new THREE.Vector3(-35,0,40), false,
 				document.getElementById("front")));
-			viewPorts.push(new THREE.ViewPort(new THREE.Vector3(0, 176,66), false,
+			viewPorts.push(new THREE.ViewPort(new THREE.Vector3(136, 0,40), false,
 				document.getElementById("back")));
+            viewPorts.push(new THREE.ViewPort(new THREE.Vector3(50,0,18),false,
+				document.getElementById("interior")));
         }
         animateScene();
 
@@ -255,15 +276,16 @@
             scene.add(camera);
 
             var grid = new THREE.GridHelper(400,400, 0xffffff, 0x555555);
-          //   scene.add(grid);
-            _controls = new THREE.OrbitControls(camera, renderer.domElement, document, defaultViews);
+             scene.add(grid);
+            _controls = new THREE.OrbitControls(camera, renderer.domElement, document);
             _controls.panSpeed = 0.8;
             _controls.noPan = false;
             viewPortController = new THREE.ViewPortController(_controls,viewPorts);
 
             geometryArray = new Object();
 
-			loadJSON(jsonFileNames,numberOfJSONFiles,boundingBoxMinimum,boundingBoxMaximum);
+			//loadJSON(jsonFileNames,numberOfJSONFiles,boundingBoxMinimum,boundingBoxMaximum);
+			loadJSON(jsonFileNamesFord,numberOfJSONFilesFord,boundingBoxMinimumFord,boundingBoxMaximumFord);
 
             pointLight = new THREE.PointLight(0xffffff, 1.0);
             pointLight.position.copy(camera.position);
@@ -280,8 +302,11 @@
                 document.getElementById("colorGrey").addEventListener("click",colorClicked);
 
                 //TODO HIde when not a distance away form the deafult view
-                document.getElementById("resetButton").addEventListener("click", setNewDefaultView);
+              //  document.getElementById("resetButton").addEventListener("click", setNewDefaultView);
             }
+            stats = new Stats();
+
+            container.appendChild(stats.dom);
 
         }
         function loadJSON(jsonFileNames, numberOfJSONFiles, boundingBoxMinimum,boundingBoxMaximum) {
@@ -410,6 +435,7 @@
         }
         function renderScene(){
             render();
+            stats.update();
             renderer.render(scene, camera);
         }
         function render() {
