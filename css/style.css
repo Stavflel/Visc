@@ -173,3 +173,101 @@ p.menu-heading-active{
     padding: 0 0 0 80px;
   }
 }
+.btn-arrow-right{
+    -webkit-clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
+    clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
+    height: 40px;
+    width: 25%;
+    padding: 0px;
+    margin-left: -4.5%;
+    margin-right: -4.5%;
+}
+
+.btn-arrow-start{
+    -webkit-clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 0% 0%);
+    clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 0% 0%);
+    height: 40px;
+    width: 25%;
+    padding: 0px;
+    margin: 0px;
+    margin-right: -4.5%;
+}
+
+.btn-arrow-end{
+    -webkit-clip-path: polygon(100% 0, 100% 100%, 0% 100%, 25% 50%, 0% 0%);
+    clip-path: polygon(100% 0, 100% 100%, 0% 100%, 25% 50%, 0% 0%);
+    height: 40px;
+    width: 25%;
+    padding: 0px;
+    margin: 0px;
+    margin-left: -4.5%;
+}
+
+.centerXY{
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.centerY{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.centerX{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+h4.panel-title a.collapsed .fa-caret-down {
+        color: #ada9a9 !important;
+        transform: rotate(0deg);
+}
+h4.panel-title a .fa-caret-down {
+        color: #515e64 !important;
+        transform: rotate(180deg);
+}
+
+.infoIcon{
+    position: relative;
+    float: right;
+    margin-right: 5px;
+}
+
+.itemName{
+    text-align: center;
+    font-weight: bold;
+    margin: 0px;
+    margin-top: 3px;
+    padding: 0px;
+}
+
+.itemImg{
+    width: 60px;
+    height: 60px;
+    position: relative;
+}
+
+.item{
+    padding-top: 25px;
+}
+
+#priceBox{
+    z-index: 10; 
+    position: absolute; 
+    bottom: 40px; 
+    right: 0;
+    background-color: white;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.highlight{
+    background-color: gray;
+    border-radius: 10px;
+}

@@ -1,23 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 	<link rel="stylesheet" href="css/style.css" />
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
   	<script src="js/three.js"></script>
-
-  	<link href="css/bootstrap-directional-buttons.css" rel="stylesheet">
+  	<script src="js/scripts.js"></script>
   </head>
   
   <body>
@@ -25,120 +20,95 @@
 		<div class="row">
 			<!-- Start Main window -->
 			<div class="col-md-8 testborder">
-				<!-- Used for threejs -->
-				<div id="container" style="min-height:500px;"></div>
+				<!-- Start visualisation -->
+				<div id="container">
+					<!-- Start price box -->
+					<div id="priceBox" class="testborder">
+						<p class="nopadding nomargin" style="display: inline;">
+							<b>Price:</b> 
+								<p class="nomargin nopadding" id="totalPrice" style="display: inline;">
+									10000
+								</p>
+							<br>
+							<b>Delivery:</b> 
+							<p class="nomargin nopadding" id="totalDelivery" style="display: inline;">
+								2 Weeks 
+							</p>
+						</p>
+					</div>
+					<!-- End price box -->
+				</div>
+				<!-- End visualisation -->
 
 				<!-- Start bottom bar -->
-				<div class="col-md-12 testborder">
-				<!-- Start Menu bar -->		
-					<div class="btn-group">
-						<button type="button" class="btn btn-lg btn-arrow-right">Model</button>
-						<button type="button" class="btn btn-lg btn-arrow-right">Interior</button>
-						<button type="button" class="btn btn-lg btn-arrow-right">Exterior</button>
-						<button type="button" class="btn btn-lg btn-arrow-right">Addons</button>
-					</div>
+				<div class="col-md-12 testborder btn-group">
+				<!-- Start Menu bar -->	
+					<a type="button" href="#" page="model" class="btn btn-default btn-lg btn-arrow-start links">
+						<p class="centerXY">
+							Model
+						</p>
+					</a>
+					<a type="button" href="#" page="exterior" class="btn btn-default btn-lg btn-arrow-right links">
+						<p class="centerXY">
+							Exterior
+						</p>
+					</a>
+					<a type="button" href="#" page="interior" class="btn btn-default btn-lg btn-arrow-right links">
+						<p class="centerXY">
+							Interior
+						</p>
+					</a>
+					<a type="button" href="#" page="addons" class="btn btn-default btn-lg btn-arrow-right links">
+						<p class="centerXY">
+							Addons
+						</p>
+					</a>
+					<a type="button" href="#" page="summary" class="btn btn-default btn-lg btn-arrow-end links">
+						<p class="centerXY">
+							Summary
+						</p>
+					</a>
 				<!-- End Menu bar -->
 				</div>
-				<!-- Start bottom bar -->
+			<!-- End bottom bar -->
 			</div>
 			<!-- End Main window -->
 			
 			<!-- Start Side bar -->
 			<div class="col-md-4 testborder">
 				<h3 class="text-center">$NameOfCar</h3>
-	
 				<!-- Start Config menus -->
-				<div class="row nomargin">
-					<div class="panel-group" id="accordion" style="width:100%;">
-						<!-- Start First section -->
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h4 class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
-										Colour	
-									</a>
-									<i class="fa fa-caret-down caret" data-toggle="collapse" data-parent="#accordion" href="#collapse1"></i>
-									<hr class="nomargin nopadding">
-								</h4>
-							</div>
-							<div id="collapse1" class="panel-collapse collapse show">
-								<div class="panel-body">
-									<table class="table">
-										<tr>
-											<td>item1</td>
-											<td>item2</td>
-											<td>item3</td>
-										
-										</tr>
-										<tr>
-											<td>item4</td>
-											<td>item5</td>
-										</tr>
-									</table>
-								</div>
-							</div>
-						</div>
-						<!-- End First section -->
-						<!-- Start Second section -->
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h4 class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
-										Rims
-										<hr class="nomargin nopadding">
-									</a>
-								</h4>
-							</div>
-							<div id="collapse2" class="panel-collapse collapse">
-								<div class="panel-body row text-center nopadding nomargin">
-									<div class="col-md-4 col-sm-4 col-xs-4 testborder">
-										hej
-									</div>
-									<div class="col-md-4 col-sm-4 col-xs-4 testborder">
-										hej
-									</div>
-									<div class="col-md-4 col-sm-4 col-xs-4 testborder">
-										hej
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- End Second section -->
-						<!-- Start Third section -->
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h4 class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
-										Another option
-										<hr class="nomargin nopadding">
-									</a>
-								</h4>
-							</div>
-							<div id="collapse3" class="panel-collapse collapse">
-								<div class="panel-body">
-								</div>
-							</div>
-						</div>
-					</div>
+				<div id="sideBar">
+
 				</div>
 				<!-- End Config menus -->
-				
-				<!-- Start Config nav -->
-				<div class="testborder bottom col-md-12">
-					<button type="button" class="btn btn-default btn-small bottom float-left">&lt; Prev</button>
-					<button type="button" class="btn btn-default btn-lg float-right">Interior &gt;</button>
-				</div>
-				<!-- End Config nav -->
 			</div>
 			<!-- End Side bar -->
 
 		</div>
 	</div>
-	
+
+	<!-- Start Modals for information about item -->
+	<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content" style="display:inline-flex;">
+		        <div class="modal-header">
+		        	<h4 class="modal-title" id="title">$ItemName</h4>
+		        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+		        </div>
+		        <div class="modal-body">
+		          	<img src="" id="img" style="width:150px;height:150px;float: left;margin-right: 12px;">
+					<p id="info"></p>
+		        </div>
+			</div>
+		</div>
+	</div>
+	<!-- End Modals -->
+
 	<script>
     // Set the scene size.
-    const WIDTH = 500;
-    const HEIGHT = 500;
+    const WIDTH = 750;
+    const HEIGHT = 600;
 
     // Set some camera attributes.
     const VIEW_ANGLE = 45;
@@ -227,5 +197,6 @@
     // Schedule the first frame.
     requestAnimationFrame(update);
   </script>
+  <!-- End Scripts -->
   </body>
 </html>
