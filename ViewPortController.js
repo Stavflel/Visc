@@ -8,9 +8,9 @@
 //number of viewports,
 THREE.ViewPortController = function (orbitController, viewPorts) {
     const INTERVAL_CLOSURE_Z = 26;
-   // const CENTER_POINT = new THREE.Vector3(50,0,15);
-    const MAX_Z_POSITION = 66;
-    const MIN_Z_POSITION = 40;
+    const CENTER_POINT = new THREE.Vector3(50,0,15);
+    const MAX_Z_POSITION = 55;
+    const MIN_Z_POSITION = 30;
     const _DISTANCE_TO_ZERO_PLANE = 93;
     var _startDistance = 0;
     this.gui = new Object();
@@ -18,7 +18,7 @@ THREE.ViewPortController = function (orbitController, viewPorts) {
     this.viewPorts = viewPorts;
     this.orbitController = orbitController;
     var nearViewPorts = [];
-    var defaultViewPort = new THREE.DefaultViewPort();
+    var clickDisabled = false;
 
     //TODO Initialize default viewport
     /**
@@ -28,7 +28,7 @@ THREE.ViewPortController = function (orbitController, viewPorts) {
      * Returns value based on distance to vectors from the
      * current viewport position and camera position
      * */
-    /*var defaultViewPort = (function () {
+    var defaultViewPort = (function () {
         var currentViewPort = null;
         var viewPosition = THREE.Vector3(0,0,0);
         return {
@@ -78,7 +78,7 @@ THREE.ViewPortController = function (orbitController, viewPorts) {
               return defaultViewPort.getViewPosition().distanceTo(CENTER_POINT);
             }
         }
-    })();*/
+    })();
 
     /**
      * Called in render loop
@@ -89,17 +89,18 @@ THREE.ViewPortController = function (orbitController, viewPorts) {
     this.update = function (currentViewPos) {
         defaultViewPort.setViewPosition(currentViewPos);
         //console.log("distance to zero plane " + defaultViewPort.distanceToCenterPoint());
-       /* console.log("le view port?x + " + defaultViewPort.getViewPosition().x);
-        console.log("le view port?y + " + defaultViewPort.getViewPosition().y);
-        console.log("le view port?z + " + defaultViewPort.getViewPosition().z);*/
+       /* console.log("le view port?x  " + defaultViewPort.getViewPosition().x);
+         console.log("le view port?y  " + defaultViewPort.getViewPosition().y);
+        console.log("le view port?z +" + defaultViewPort.getViewPosition().z);*/
         if( defaultViewPort !== undefined ){
             if( defaultViewPort.getViewPort().object.getViewState() === true ){
+                console.log("moving");
                 //TODO move to view port
                 moveToViewPort();
-            }else if( defaultViewPort.getViewPort().object.getViewState() === false){
+            }/*Älse if( defaultViewPort.getViewPort().object.getViewState() === false){
                 console.log("check boundaries");
                 checkBoundaries();
-            }
+            }*/
 
         }
     };
@@ -109,6 +110,9 @@ THREE.ViewPortController = function (orbitController, viewPorts) {
         nearViewPorts.push(new THREE.DefaultViewPort('back'));
         nearViewPorts.push(new THREE.DefaultViewPort('side'));
         nearViewPorts.push(new THREE.DefaultViewPort('interior'));
+    }
+    function resetState() {
+        for(var i = 0; i < nearViewPorts.length; i++){ nearViewPorts[i].object.setState(false); }
     }
     /**
      * Initialize the default view
@@ -134,63 +138,46 @@ THREE.ViewPortController = function (orbitController, viewPorts) {
      * */
     function viewPortListener(event) {
         //resetOldDefault('');
-        console.log("event id");
-        var viewPort;
+            if(clickDisabled)
+                return;
 
-        if( event.target.id === 'front' && nearViewPorts.find(findViewPortById).object.getState() === false ){
-            resetOldDefault('');
-            viewPort = scope.viewPorts.find(findViewPortById);
-          //  closeToDefault();
-            viewPort.object.setViewState(true);
-            defaultViewPort.attachViewPort(viewPort);
-            _startDistance = defaultViewPort.distance();
-        }else if( event.target.id === 'back' && defaultViewPort.) === false ){
-            resetOldDefault('');
-            viewPort = scope.viewPorts.find(findViewPortById);
-            viewPort.object.setViewState(true);
-            defaultViewPort.attachViewPort(viewPort);
-            _startDistance = defaultViewPort.distance();
-        }else if( event.target.id === 'side' && nearViewPorts.find(findViewPortById).object.getState() === false ){
-            resetOldDefault('');
-            viewPort = scope.viewPorts.find(findViewPortById);
-            viewPort.object.setViewState(true);
-            _startDistance = defaultViewPort.distance();
-        }else if( event.target.id === 'interior' && nearViewPorts.find(findViewPortById).object.getState() === false ){
-            resetOldDefault('');
-            viewPort = scope.viewPorts.find(findViewPortById);
-            viewPort.object.setViewState(true);
-            defaultViewPort.attachViewPort(viewPort);
-            _startDistance = defaultViewPort.distance();
-        }
-        function findViewPortById(value) {
-            return value.object.getId() === event.target.id;
-        }
-       /* defaultViewPort.attachViewPort(viewPort);
-        if( defaultViewPort.getViewPort() !== undefined ){
-            scope.orbitController.autoRotate = true;
-            _startDistance = defaultViewPort.distance();
-        }*/
+
+
+            var viewPort;
+            if ( event.target.id === 'front' ) {
+                startMoving();
+            }
+            else if( event.target.id === 'back' ) {
+                startMoving();
+            }
+            else if( event.target.id === 'side' ) {
+                startMoving();
+            }
+            function startMoving (){
+                resetOldDefault('');
+                resetState();
+                viewPort = scope.viewPorts.find(findViewPortById);
+                //  closeToDefault();
+                viewPort.object.setViewState(true);
+                _controls.autoRotate = true;
+                defaultViewPort.attachViewPort(viewPort);
+                _startDistance = defaultViewPort.distance();
+            }
+            function findViewPortById(value) {
+                return value.object.getId() === event.target.id;
+            }
+
+         clickDisabled = true;
+         setTimeout(function () {
+            clickDisabled = false;
+         },2000);
+
     }
-    //TODO CHECKer so the rotation is not executed serveral times
-    function closeToDefault() {
-        console.log("defaultstate?" + defaultViewPort.getViewPort().object.getId());
-    }
-    //optimize code for finding viewport
-    /*
-       var viewPort = scope.viewPorts.find( function (value) {
-           console.log("find : " + event.target.id);
-           if( value.object.getViewState() !== true ) {
-               value.object.setViewState(true);
-               //resetOldDefault(event.target.id);
-               return value.object.getId() === event.target.id;
-           }else{ return value.object.getId() === event.target.id; }
-   });*/
     /**
      * Add false to the viewstate which is not default in the controller
      * @param id the element id
      * */
     function resetOldDefault(id) {
-       // stopRotating();
         scope.viewPorts.filter(function (value) {
             if( value.object.getId() !== id && value.object.getViewState() === true ){ value.object.setViewState(false) }
         });
@@ -218,45 +205,43 @@ THREE.ViewPortController = function (orbitController, viewPorts) {
         }
     }
     function checkRestrictionOnHighestCoord() {
-       /* console.log("distance to zero plane " + defaultViewPort.distanceToCenterPoint());
-        console.log("le view port?x + " + defaultViewPort.getViewPosition().x);
-        console.log("le view port?y + " + defaultViewPort.getViewPosition().y);
-        console.log("le view port?z + " + defaultViewPort.getViewPosition().z);*/
-      /*  console.log("max value:  " + scope.axis().maxValue());
-        console.log("min value:  " + scope.axis().minValue());
-        console.log("zero axis:  " + scope.axis().zeroAxis());
-        console.log("axis position?:  " + defaultViewPort.getAxisPosition(scope.axis().minValue()));*/
+
         if(defaultViewPort.getViewPort().object.getPosition().x > 0){
-            return defaultViewPort.getAxisPosition(defaultViewPort.getViewPortAxisPosition(scope.axis().maxValue())) > scope.axis().maxValue() - 2;
+            return defaultViewPort.getAxisPosition(
+                defaultViewPort.getViewPortAxisPosition(scope.axis().maxValue())) > scope.axis().maxValue() - 5;
         }else{
             return defaultViewPort.getAxisPosition(defaultViewPort.getViewPortAxisPosition(scope.axis().minValue()))
-                < defaultViewPort.getViewPort().object.getPosition().x + 2;
+                < defaultViewPort.getViewPort().object.getPosition().x + 5;
         }
     }
     function checkIfZeroOnNoneZeroAxis(){
-        console.log(" check return value : " + scope.axis().zeroAxis());
-        console.log("le view port?x + " + defaultViewPort.getViewPosition().x);
-        console.log("le view port?y + " + defaultViewPort.getViewPosition().y);
-        console.log("le view port?z + " + defaultViewPort.getViewPosition().z);
-        console.log("the zero value :  " + defaultViewPort.getAxisPosition(scope.axis().zeroAxis()));
-        var test = defaultViewPort.getViewPort().object.getPosition().toArray();
         if(scope.axis().zeroAxis() === 1){
-            return defaultViewPort.getAxisPosition(scope.axis().zeroAxis()) < 10 &&
+            return defaultViewPort.getAxisPosition(scope.axis().zeroAxis()) < 15 &&
                 defaultViewPort.getAxisPosition(scope.axis().zeroAxis()) > 0;
         }
         //TODO is working for this car need to be change
         else{
            return  defaultViewPort.getAxisPosition(defaultViewPort.getViewPortAxisPosition(scope.axis().minValue()))
                < scope.axis().minValue() + 10 && scope.axis().minValue() >
-               defaultViewPort.getAxisPosition(defaultViewPort.getViewPortAxisPosition(scope.axis().minValue())) - 10
+               defaultViewPort.getAxisPosition(defaultViewPort.getViewPortAxisPosition(scope.axis().minValue())) - 15
         }
     }
     function moveToViewPort() {
         rotationDirection();
+        if (currentVectorPosition.z > MAX_Z_POSITION) {
+            console.log("max min");
+            scope.orbitController.updateRotationUp('down');
+        } else if (currentVectorPosition.z < MIN_Z_POSITION) {
+            console.log("min max");
+            scope.orbitController.updateRotationUp('up');
+        }
         if (checkRestrictionOnHighestCoord()) {
+            console.log("zero or none");
             if (currentVectorPosition.z > MAX_Z_POSITION) {
+                console.log("max min");
                 scope.orbitController.updateRotationUp('down');
             } else if (currentVectorPosition.z < MIN_Z_POSITION) {
+                console.log("min max");
                 scope.orbitController.updateRotationUp('up');
             }else if(checkIfZeroOnNoneZeroAxis()){
                 stopRotating();
@@ -298,14 +283,18 @@ THREE.ViewPortController = function (orbitController, viewPorts) {
         if(tracker === 3){
             console.log("ehehe :D");
             nearViewPorts.find(function (value) {
-                return value.object.getId() === defaultViewPort.getViewPort().object.getId();
-            }).object.setState(false);
+                return value.object.getId() === defaultViewPort.getViewPort().object.getId()
+            }).setState(false);
         }
     }
     //Stop rotating on both direction
     function stopRotating() {
         scope.orbitController.autoRotateNegative = false;
         scope.orbitController.autoRotate = false;
+        var nearPort = nearViewPorts.find(function (value) {
+            return value.object.getId() === defaultViewPort.getViewPort().object.getId();
+        });
+        nearPort.object.setState(true);
         resetOldDefault('');
     }
     //Have a new view port to rotate to
@@ -330,12 +319,7 @@ THREE.ViewPortController = function (orbitController, viewPorts) {
     };
     if (!Array.prototype.indexOf) {
         Array.prototype.indexOf = function indexOf(member, startFrom) {
-            /*
-            In non-strict mode, if the `this` variable is null or undefined, then it is
-            set to the window object. Otherwise, `this` is automatically converted to an
-            object. In strict mode, if the `this` variable is null or undefined, a
-            `TypeError` is thrown.
-            */
+
             if (this == null) {
                 throw new TypeError("Array.prototype.indexOf() - can't convert `" + this + "` to object");
             }
@@ -354,10 +338,7 @@ THREE.ViewPortController = function (orbitController, viewPorts) {
             }
 
             if (member === undefined) {
-                /*
-                  Since `member` is undefined, keys that don't exist will have the same
-                  value as `member`, and thus do need to be checked.
-                */
+
                 do {
                     if (index in that && that[index] === undefined) {
                         return index;
