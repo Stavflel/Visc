@@ -284,6 +284,7 @@
             containerWidth = container.clientWidth;
             containerHeight = container.clientHeight;
             renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+            renderer.setPixelRatio(window.devicePixelRatio);
             renderer.setSize(containerWidth, containerHeight);
             container.appendChild(renderer.domElement);
 
