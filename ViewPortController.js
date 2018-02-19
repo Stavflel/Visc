@@ -6,7 +6,7 @@
  * */
 
 //number of viewports,
-THREE.ViewPortController = function (orbitController, viewPorts) {
+THREE.ViewPortController = function (orbitController, viewPorts, guiElement) {
     const INTERVAL_CLOSURE_Z = 26;
     const CENTER_POINT = new THREE.Vector3(50,0,15);
     const MAX_Z_POSITION = 55;
@@ -15,6 +15,7 @@ THREE.ViewPortController = function (orbitController, viewPorts) {
     var _startDistance = 0;
     this.gui = new Object();
     var scope = this;
+    var guiElement = guiElement;
     this.viewPorts = viewPorts;
     this.orbitController = orbitController;
     var nearViewPorts = [];
@@ -94,7 +95,7 @@ THREE.ViewPortController = function (orbitController, viewPorts) {
         console.log("le view port?z +" + defaultViewPort.getViewPosition().z);*/
         if( defaultViewPort !== undefined ){
             if( defaultViewPort.getViewPort().object.getViewState() === true ){
-                console.log("moving");
+             //   console.log("moving");
                 //TODO move to view port
                 moveToViewPort();
             }/*Älse if( defaultViewPort.getViewPort().object.getViewState() === false){
@@ -137,34 +138,79 @@ THREE.ViewPortController = function (orbitController, viewPorts) {
      * from the viewport that is clicked in the view
      * */
     function viewPortListener(event) {
+        console.log("wahaw" + event.target.id);
+        var _eventID = '';
         //resetOldDefault('');
-            if(clickDisabled)
+            if(clickDisabled) {
                 return;
-
-
-
+            }
             var viewPort;
-            if ( event.target.id === 'front' ) {
+            if ( event.target.id === 'front' || event.target.id === 'frontbutton'  || event.target.id === 'fronttext' ) {
+                _eventID = 'front';
                 startMoving();
+                setGUIValuesOnCamera();
             }
-            else if( event.target.id === 'back' ) {
+            else if( event.target.id === 'back' || event.target.id === 'backbutton'  || event.target.id === 'backtext'  ) {
+                _eventID = 'back';
                 startMoving();
+                setGUIValuesOnCamera();
             }
-            else if( event.target.id === 'side' ) {
+            else if( event.target.id === 'side' || event.target.id === 'sidebutton'  || event.target.id === 'sidetext'  ) {
+                _eventID = 'side';
                 startMoving();
+                setGUIValuesOnCamera();
             }
             function startMoving (){
                 resetOldDefault('');
                 resetState();
                 viewPort = scope.viewPorts.find(findViewPortById);
-                //  closeToDefault();
                 viewPort.object.setViewState(true);
                 _controls.autoRotate = true;
                 defaultViewPort.attachViewPort(viewPort);
                 _startDistance = defaultViewPort.distance();
             }
+            function setGUIValuesOnCamera(){
+                resetClassesButton();
+              //  resetClassesText();
+                defaultViewPort.getViewPort().object.getViewButtonElement().classList.remove("buttoninactive");
+                defaultViewPort.getViewPort().object.getViewButtonElement().classList.remove("button");
+                defaultViewPort.getViewPort().object.getViewButtonElement().classList.add("button");
+
+                defaultViewPort.getViewPort().object.getViewTextElement().classList.remove("textinactive");
+                defaultViewPort.getViewPort().object.getViewTextElement().classList.remove("text");
+                defaultViewPort.getViewPort().object.getViewTextElement().classList.add("text");
+               // defaultViewPort.getViewPort().object.getViewElement().classList.remove()
+            }
+            function resetClassesButton(){
+                var array = Array.prototype.slice.call(guiElement.children);
+                for(var i = 0; i < array.length; i += 1)    {
+                    var children = Array.prototype.slice.call(array[i].children);
+                    for(var j = 0; j < children.length; j += 1){
+                        if(children[j].classList.contains("button")) {
+                            children[j].classList.remove("button");
+                            children[j].classList.add("buttoninactive");
+                        }
+                        if(children[j].classList.contains("text")) {
+                            children[j].classList.remove("text");
+                            children[j].classList.add("textinactive");
+                        }
+                    }
+                }
+            }
+        function resetClassesText(){
+            var array = Array.prototype.slice.call(guiElement.children);
+            for(var i = 0; i < array.length; i += 1)    {
+                var children = Array.prototype.slice.call(array[i].children);
+                for(var j = 0; j < children.length; j += 1){
+                    if(children[j].classList.contains("text")) {
+                        children[j].classList.remove("text");
+                        children[j].classList.add("textinactive");
+                    }
+                }
+            }
+        }
             function findViewPortById(value) {
-                return value.object.getId() === event.target.id;
+                return value.object.getId() === _eventID;
             }
 
          clickDisabled = true;
@@ -229,19 +275,19 @@ THREE.ViewPortController = function (orbitController, viewPorts) {
     function moveToViewPort() {
         rotationDirection();
         if (currentVectorPosition.z > MAX_Z_POSITION) {
-            console.log("max min");
+           // console.log("max min");
             scope.orbitController.updateRotationUp('down');
         } else if (currentVectorPosition.z < MIN_Z_POSITION) {
-            console.log("min max");
+          //  console.log("min max");
             scope.orbitController.updateRotationUp('up');
         }
         if (checkRestrictionOnHighestCoord()) {
-            console.log("zero or none");
+          //  console.log("zero or none");
             if (currentVectorPosition.z > MAX_Z_POSITION) {
-                console.log("max min");
+           //     console.log("max min");
                 scope.orbitController.updateRotationUp('down');
             } else if (currentVectorPosition.z < MIN_Z_POSITION) {
-                console.log("min max");
+            //    console.log("min max");
                 scope.orbitController.updateRotationUp('up');
             }else if(checkIfZeroOnNoneZeroAxis()){
                 stopRotating();
