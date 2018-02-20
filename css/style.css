@@ -1,3 +1,12 @@
+#resetButton{
+    position: absolute;
+    z-index: 1000;
+    left: 50%;
+    top: 76%;
+    font-size: 3rem;
+    font-weight: 200;
+    line-height: 1.5;
+}
 .testborder {
     margin:0px;
 	padding:0px;
@@ -19,160 +28,9 @@
 	position:absolute; bottom:0;
 }
 .current{
-	background-color:grey;
-}
-p.menu-heading{
-	text-align: center;
-    position: relative;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-}
-p.menu-heading-active{
-	font-weight:bold;
-}
-.vcenter {
-    display: inline-block;
-    vertical-align: middle;
-    float: none;
-}
-.navbar-default .navbar-nav>li>a:focus .caret{
-	transform:rotate(-90deg);
-	transition:all 0.3s ease-in-out; 
+	background-color:gray;
 }
 
-
-/* --- VARS --- */
-/* --- MIXINS --- */
-/* --- DEMO CONTENT--- */
-.navbar-menu {
-  border: 0;
-  border-radius: 0;
-}
-.navbar-menu .navbar-collapse {
-  padding: 0;
-  border-top: 0;
-}
-.navbar-main {
-  margin: 0;
-}
-.navbar-menu {
-  background-color: #7352a4;
-}
-.navbar-menu .navbar-header {
-  padding: 7px;
-}
-.navbar-main > li > a {
-  font-size: 25px;
-  font-weight: 900;
-  color: #ffffff;
-  text-transform: uppercase;
-  -webkit-transition: 0.2s color ease-in-out;
-  transition: 0.2s color ease-in-out;
-  -webkit-transition: 0.2s background ease-in-out;
-  transition: 0.2s background ease-in-out;
-}
-.navbar-main > li > a small {
-  color: #fff;
-  font-size: 15px;
-  font-weight: 300;
-  text-transform: none;
-}
-.navbar-main > li > a:hover,
-.navbar-main > li > a:focus,
-.navbar-main > li > a.active {
-  background-color: #ffffff;
-  color: #583e7e;
-}
-.navbar-main > li > a:hover small,
-.navbar-main > li > a:focus small,
-.navbar-main > li > a.active small {
-  color: #000;
-}
-@media (min-width: 768px) {
-  .navbar-main-container {
-    background-color: #7352a4;
-    background-repeat: repeat-x;
-    background-image: -webkit-gradient(linear, 50% top, 50% top, from(#7352a4), to(#583e7e));
-    background-image: -webkit-linear-gradient(left, color-stop(#7352a4 50%), color-stop(#583e7e 50%));
-    background-image: -moz-linear-gradient(left, #7352a4 50%, #583e7e 50%);
-    background-image: linear-gradient(to right, #7352a4 50%, #583e7e 50%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#7352a4', endColorstr='#583e7e', GradientType=1);
-    /* IE6-9 */
-  }
-  .navbar-main-container .navbar-nav {
-    float: none;
-  }
-  .navbar-main {
-    margin: 0 auto;
-    padding-right: 40px;
-    max-width: 730px;
-  }
-  .navbar-main li {
-    display: inline-block;
-    height: 80px;
-    position: relative;
-    width: 33.3%;
-    background-color: #583e7e;
-    background-repeat: repeat-x;
-    background-image: -webkit-gradient(linear, 0% top, 100% top, from(#583e7e), to(#7352a4));
-    background-image: -webkit-linear-gradient(left, color-stop(#583e7e 0%), color-stop(#7352a4 100%));
-    background-image: -moz-linear-gradient(left, #583e7e 0%, #7352a4 100%);
-    background-image: linear-gradient(to right, #583e7e 0%, #7352a4 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#583e7e', endColorstr='#7352a4', GradientType=1);
-    /* IE6-9 */
-  }
-  .navbar-main li:first-child:before {
-    border: 40px solid transparent;
-    border-left-color: #7352a4;
-    border-right: 0;
-    content: " ";
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 0px;
-    width: 0px;
-    z-index: 10;
-  }
-  .navbar-main li a {
-    display: table;
-    height: 100%;
-    padding: 0 0 0 66.66666667px;
-    position: relative;
-    width: 100%;
-  }
-  .navbar-main li a:after {
-    border: 40px solid transparent;
-    border-left-color: #7352a4;
-    border-right: 0;
-    content: " ";
-    display: block;
-    position: absolute;
-    right: -40px;
-    top: 0px;
-    width: 0px;
-    z-index: 10;
-    -webkit-transition: 0.2s border-color ease-in-out;
-    transition: 0.2s border-color ease-in-out;
-  }
-  .navbar-main li a:hover:after,
-  .navbar-main li a.active:after {
-    border-left-color: #ffffff;
-  }
-  .navbar-main li a span {
-    display: table-cell;
-    vertical-align: middle;
-  }
-}
-@media (min-width: 992px) {
-  .navbar-main {
-    max-width: 980px;
-  }
-  .navbar-main li a {
-    padding: 0 0 0 80px;
-  }
-}
 .btn-arrow-right{
     -webkit-clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
     clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
@@ -241,7 +99,7 @@ h4.panel-title a .fa-caret-down {
     text-align: center;
     font-weight: bold;
     margin: 0px;
-    margin-top: 3px;
+    margin-top: 3px !important;
     padding: 0px;
 }
 
@@ -253,6 +111,19 @@ h4.panel-title a .fa-caret-down {
 
 .item{
     padding-top: 25px;
+}
+
+.colorItem{
+    padding-top: 10px;
+}
+
+.colorName{
+    text-align: center;
+    font-weight: bold;
+    margin: 0px;
+    padding-top: 2px !important;
+    padding-bottom: 5px !important;
+    padding: 0px;
 }
 
 #priceBox{
@@ -271,3 +142,96 @@ h4.panel-title a .fa-caret-down {
     background-color: gray;
     border-radius: 10px;
 }
+
+.colorPick{
+  width: 35px;
+  height: 35px;
+  border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.blue {
+  background: #13b4ff;
+}
+
+.purple {
+  background: #ab3fdd;
+}
+
+.red {
+  background: #ae163e;
+}
+
+.orange{
+  background: #e5841d;
+}
+
+.gray{
+  background: #ccc9c5;
+}
+
+.teal{
+  background: #4dd1ca;
+}
+
+.pink{
+  background: #ff00bb;
+}
+
+.activeBar{
+    background: #666666;
+}
+
+.visitedBar{
+    background: #a0a0a0;
+}
+#cameraButtons {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    text-align: center;
+}
+#cameraButtons #fronttext{
+    top: 20px;
+    z-index: 2000;
+}
+#cameraText{
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+}
+#cameraButtons .button{
+    min-width: 100px;
+    min-height: 10px;
+    background: black;
+    opacity: 0.5;
+    display: inline-block;
+}
+#cameraButtons .text{
+    font-weight: 700;
+    margin-top: -5px;
+    opacity: 0.5;
+}
+#cameraButtons .textinactive{
+    font-weight: 700;
+    margin-top: -5px;
+    opacity: 0;
+}
+#cameraButtons .infocontainer:hover .textinactive{
+    font-weight: 700;
+    margin-top: -5px;
+    opacity: 0.5;
+}
+#cameraButtons .infocontainer {
+    min-width: 100px;
+    min-height: 10px;
+    display: inline-block;
+    cursor: pointer;
+}
+#cameraButtons .buttoninactive{
+    min-width: 100px;
+    min-height: 5px;
+    background: black;
+    opacity: 0.2;
+    display: inline-block;

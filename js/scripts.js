@@ -31,3 +31,12 @@ $(document).ready(function () {
 	    $(this).addClass(addclass);
 	});
 });
+
+$(document).ready(function () {
+	var addclass = 'highlight';
+	var $cols = $('.colorItem').click(function(e) {
+	    $cols.removeClass(addclass);
+	    $(this).addClass(addclass);
+	});
+});
+

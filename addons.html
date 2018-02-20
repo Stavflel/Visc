@@ -2,11 +2,11 @@
 
 <!-- Set active button -->
 <script type="text/javascript">
-	if($("#exteriorBar").hasClass('visitedBar')){
-		$("#exteriorBar").removeClass("visitedBar");
+	if($("#addonsBar").hasClass('visitedBar')){
+		$("#addonsBar").removeClass("visitedBar");
 	}
 	
-	$("#exteriorBar").addClass('activeBar');
+	$("#addonsBar").addClass('activeBar');
 
 	$(document).ready(function () {
 		if( $("#modelBar").hasClass("activeBar")) {
@@ -16,17 +16,16 @@
 	});
 
 	$(document).ready(function () {
-		if( $("#interiorBar").hasClass("activeBar")) {
-			$("#interiorBar").removeClass("activeBar");
-			$("#interiorBar").addClass("visitedBar");
+		if( $("#exteriorBar").hasClass("activeBar")) {
+			$("#exteriorBar").removeClass("activeBar");
+			$("#exteriorBar").addClass("visitedBar");
 		}
 	});
 
 	$(document).ready(function () {
-		if( $("#addonsBar").hasClass("activeBar")) {
-			console.log( "ready!" );
-			$("#addonsBar").removeClass("activeBar");
-			$("#addonsBar").addClass("visitedBar");
+		if( $("#interiorBar").hasClass("activeBar")) {
+			$("#interiorBar").removeClass("activeBar");
+			$("#interiorBar").addClass("visitedBar");
 		}
 	});
 
@@ -169,11 +168,11 @@
 
 <!-- Start Config nav -->
 <div class="testborder bottom col-md-12">
-	<a type="button" href="model.html" class="btn btn-default btn-small bottom float-left">
-		&lt; Model
+	<a type="button" href="#" page="interior" class="btn btn-default btn-small bottom float-left links">
+		&lt; Interior
 	</a>
-	<a type="button" href="#" page="interior" class="btn btn-default btn-lg float-right links">
-		Interior &gt;
+	<a type="button" href="#" page="summary" class="btn btn-default btn-lg float-right links">
+		Summary &gt;
 	</a>
 </div>
 <!-- End Config nav -->

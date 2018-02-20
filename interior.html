@@ -1,5 +1,43 @@
 <script src="js/scripts.js"></script>
 
+<!-- Set active button -->
+<script type="text/javascript">
+	if($("#interiorBar").hasClass('visitedBar')){
+		$("#interiorBar").removeClass("visitedBar");
+	}
+	
+	$("#interiorBar").addClass('activeBar');
+
+	$(document).ready(function () {
+		if( $("#modelBar").hasClass("activeBar")) {
+			$("#modelBar").removeClass("activeBar");
+			$("#modelBar").addClass("visitedBar");
+		}
+	});
+
+	$(document).ready(function () {
+		if( $("#exteriorBar").hasClass("activeBar")) {
+			$("#exteriorBar").removeClass("activeBar");
+			$("#exteriorBar").addClass("visitedBar");
+		}
+	});
+
+	$(document).ready(function () {
+		if( $("#addonsBar").hasClass("activeBar")) {
+			console.log( "ready!" );
+			$("#addonsBar").removeClass("activeBar");
+			$("#addonsBar").addClass("visitedBar");
+		}
+	});
+
+	$(document).ready(function () {
+		if( $("#summaryBar").hasClass("activeBar")) {
+			$("#summaryBar").removeClass("activeBar");
+			$("#summaryBar").addClass("visitedBar");
+		}
+	});
+</script>
+
 <div class="panel-group" id="accordion" style="width:100%;">
 	<!-- Start First section -->
 	<div class="panel panel-default">
@@ -87,11 +125,11 @@ Don't Morty me! I tricked Rick into taking Dad on an adventure because I thought
 
 				<!-- Start Config nav -->
 <div class="testborder bottom col-md-12">
-	<button type="button" href="#" page="exterior" class="btn btn-default btn-small bottom float-left links">
+	<a type="button" href="#" page="exterior" class="btn btn-default btn-small bottom float-left links">
 		&lt; Exterior
-	</button>
-	<button type="button" href="#" page="addons" class="btn btn-default btn-lg float-right links">
+	</a>
+	<a type="button" href="#" page="addons" class="btn btn-default btn-lg float-right links">
 		Addons &gt;
-	</button>
+	</a>
 </div>
 <!-- End Config nav -->
