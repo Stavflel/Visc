@@ -7,40 +7,33 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 		<link rel="stylesheet" href="css/style.css" />
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="js/scripts.js"></script>
+
+		<script type="text/javascript">
+			sessionStorage.setItem('model', 'visited');
+
+			function clearSession() {
+    			sessionStorage.clear();
+			}
+		</script>
 	</head>
 	<body>
-		<div class="container">
+		<div class="container configBackground">
 			<div class="row">
 
 				<!-- Start Model choice -->
-				<div class="col-lg-3 col-md-3 col-sm-3 testborder">
+				<div class="col-lg-3 col-md-3 col-sm-3">
 					<h3 class="nomargin nopadding">
 						Sedan
 					</h3>
 					<hr class="nomargin nopadding" style="height:3px;border: none;background: black;">
 					<div class="container-fluid row nomargin nopadding">
-						<div class="col-md-6 col-sm-6 col-xs-6 item testborder">
+						<div class="col-md-6 col-sm-6 col-xs-6 item nomargin nopadding modelItem links" page="modelinfo/ford_mondeo" href="#" onclick="changeModelName('Ford Mondeo')">
 							<img src="media/rim1.png" class="itemImg centerX">
 							<p class="itemName">
-								Opel Astra
-							</p>
-						</div>
-						<div class="col-md-6 col-sm-6 col-xs-6 item testborder">
-							<img src="media/rim1.png" class="itemImg centerX">
-							<p class="itemName">
-								Opel Astra
-							</p>
-						</div>
-						<div class="col-md-6 col-sm-6 col-xs-6 item testborder">
-							<img src="media/rim1.png" class="itemImg centerX">
-							<p class="itemName">
-								Opel Astra
-							</p>
-						</div>
-						<div class="col-md-6 col-sm-6 col-xs-6 item testborder">
-							<img src="media/rim1.png" class="itemImg centerX">
-							<p class="itemName">
-								Opel Astra
+								Ford Mondeo
 							</p>
 						</div>
 					</div>
@@ -48,48 +41,23 @@
 				<!-- End Model choice -->
 
 				<!-- Start Middle -->
-				<div class="col-lg-6 col-md-6 col-sm-6 testborder">
-					<h2 class="text-center">
-						$NameOfCar
+				<div class="col-lg-6 col-md-6 col-sm-6 nomargin nopadding">
+					<h2 class="text-center" id="modelName">
+						Choose Model
 					</h2>
-					<div class="container testborder">
-						här syns bilen
+					<div class="container nomargin nopadding text-center centerY" style="min-height:550px;">
+						detta är en bild på en bil<br>
+						*wroom* *wroom*
 					</div>
-					<a type="button" class="btn btn-lg centerX" style="position: absolute; bottom:10px;" href="index.html">
+					<a type="button" class="btn btn-lg centerX" style="position: absolute; bottom:15px;" href="index.html" onclick="clearSession()">
 						Begin Configuration
 					</a>
 				</div>
 				<!-- End Middle -->
 
 				<!-- Start Selling points -->
-				<div class="col-lg-3 col-md-3 col-sm-3 testborder">
-					<div class="container testborder">
-						<h3>
-							Selling point
-						</h3>
-						<hr class="nomargin nopadding">
-						<p>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum at orci pulvinar est efficitur tincidunt eu quis massa. Duis at felis sed erat vulputate mattis at et lacus. Donec semper, nunc ut porta commodo, risus ex tincidunt dolor, id aliquam mi dolor sed ante.
-						</p>
-					</div>
-					<div class="container testborder">
-						<h3>
-							Selling point
-						</h3>
-						<hr class="nomargin nopadding">
-						<p>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum at orci pulvinar est efficitur tincidunt eu quis massa. Duis at felis sed erat vulputate mattis at et lacus. Donec semper, nunc ut porta commodo, risus ex tincidunt dolor, id aliquam mi dolor sed ante.
-						</p>
-					</div>
-					<div class="container testborder">
-						<h3>
-							Selling point
-						</h3>
-						<hr class="nomargin nopadding">
-						<p>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum at orci pulvinar est efficitur tincidunt eu quis massa. Duis at felis sed erat vulputate mattis at et lacus. Donec semper, nunc ut porta commodo, risus ex tincidunt dolor, id aliquam mi dolor sed ante.
-						</p>
-					</div>
+				<div class="col-lg-3 col-md-3 col-sm-3 nomargin nopadding" id="sideBar">
+					
 				</div>
 				<!-- End Selling points -->
 

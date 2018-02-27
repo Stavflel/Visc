@@ -1,3 +1,7 @@
+.configBackground{
+    background: #fcfcfc;
+}
+
 #resetButton{
     position: absolute;
     z-index: 1000;
@@ -30,11 +34,15 @@
 .current{
 	background-color:gray;
 }
-
+.summaryBox {
+    width: 100%;
+    border: 1px solid #ccc;
+    box-shadow: 5px 5px 5px -5px #333;
+}
 .btn-arrow-right{
     -webkit-clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
     clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
-    height: 40px;
+    height: 45px;
     width: 25%;
     padding: 0px;
     margin-left: -4.5%;
@@ -44,7 +52,7 @@
 .btn-arrow-start{
     -webkit-clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 0% 0%);
     clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 0% 0%);
-    height: 40px;
+    height: 45px;
     width: 25%;
     padding: 0px;
     margin: 0px;
@@ -54,7 +62,7 @@
 .btn-arrow-end{
     -webkit-clip-path: polygon(100% 0, 100% 100%, 0% 100%, 25% 50%, 0% 0%);
     clip-path: polygon(100% 0, 100% 100%, 0% 100%, 25% 50%, 0% 0%);
-    height: 40px;
+    height: 45px;
     width: 25%;
     padding: 0px;
     margin: 0px;
@@ -129,9 +137,26 @@ h4.panel-title a .fa-caret-down {
 #priceBox{
     z-index: 10; 
     position: absolute; 
-    bottom: 40px; 
-    right: 0;
-    background-color: white;
+    bottom: 45px; 
+    right: 0px;
+
+    padding-top: 5px !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    
+    box-shadow: -2px -2px 12px 1px #222;
+    -moz-box-shadow: -2px -2px 12px 1px #222;
+    -webkit-box-shadow: -2px -2px 12px 1px #222;
+
+    border-radius: 10px 0px 0px 0px;
+    -moz-border-radius: 10px 0px 0px 0px;
+    -webkit-border-radius: 10px 0px 0px 0px;
+
+    /* background: white;*/
+    
+    margin:0px auto;
+    border-left:2px solid #fff;
+    border-right:2px solid #fff;
 }
 
 .text-center{
@@ -180,9 +205,16 @@ h4.panel-title a .fa-caret-down {
 .activeBar{
     background: #666666;
 }
-
 .visitedBar{
     background: #a0a0a0;
+}
+.leftBorder{
+    border-left: 5px solid;
+    border-color: #555759;
+}
+.groupHead{
+    padding: 0px 0px 0px 10px;
+    margin: 0px;
 }
 #cameraButtons {
     position: absolute;
@@ -235,3 +267,27 @@ h4.panel-title a .fa-caret-down {
     background: black;
     opacity: 0.2;
     display: inline-block;
+}
+header{
+    width: 100%;
+    padding: 60px 0;
+    background: #fff;
+    border-bottom: 1px solid #e1e1e1;
+
+    transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out ;
+    z-index: 9999;
+    top: 0;
+    position: fixed;
+}
+.shrink{
+    padding: 20px 0
+}
+
+ul{
+    list-style: none;
+}
+ul>li:nth-child(odd){
+    background:grey; 
+}
