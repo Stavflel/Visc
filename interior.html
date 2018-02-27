@@ -2,6 +2,8 @@
 
 <!-- Set active button -->
 <script type="text/javascript">
+	sessionStorage.setItem('interior', 'visited');
+
 	if($("#interiorBar").hasClass('visitedBar')){
 		$("#interiorBar").removeClass("visitedBar");
 	}
@@ -43,11 +45,11 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h4 class="panel-title">
-				<a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+				<a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="groupHead">
 					Colour
 					<span class="fa fa-caret-down" data-toggle="collapse" data-parent="#accordion" href="#collapse1" style="float:right; padding-left: 8px; padding-right: 8px;"></span>
-					<hr class="nomargin nopadding">	
 				</a>
+				<hr class="nomargin nopadding">	
 			</h4>
 		</div>
 		<div id="collapse1" class="panel-collapse collapse show">
@@ -73,11 +75,11 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h4 class="panel-title">
-				<a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="collapsed">
+				<a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="collapsed groupHead">
 					Rims
 					<span class="fa fa-caret-down" data-toggle="collapse" data-parent="#accordion" href="#collapse2" style="float:right; padding-left: 8px; padding-right: 8px;"></span>
-					<hr class="nomargin nopadding">
 				</a>
+				<hr class="nomargin nopadding">
 			</h4>
 		</div>
 		<div id="collapse2" class="panel-collapse collapse">
@@ -109,11 +111,11 @@ Don't Morty me! I tricked Rick into taking Dad on an adventure because I thought
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h4 class="panel-title">
-				<a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="collapsed">
+				<a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="collapsed groupHead">
 					Another option
 					<span class="fa fa-caret-down" data-toggle="collapse" data-parent="#accordion" href="#collapse3" style="float:right; padding-left: 8px; padding-right: 8px;"></span>
-					<hr class="nomargin nopadding">
 				</a>
+				<hr class="nomargin nopadding">
 			</h4>
 		</div>
 		<div id="collapse3" class="panel-collapse collapse">
@@ -124,7 +126,7 @@ Don't Morty me! I tricked Rick into taking Dad on an adventure because I thought
 </div>
 
 				<!-- Start Config nav -->
-<div class="testborder bottom col-md-12">
+<div class="nomargin nopadding bottom col-md-12">
 	<a type="button" href="#" page="exterior" class="btn btn-default btn-small bottom float-left links">
 		&lt; Exterior
 	</a>
