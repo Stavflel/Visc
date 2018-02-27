@@ -53,37 +53,37 @@
 		<div id="collapse1" class="panel-collapse collapse show">
 			<div class="panel-body row nopadding nomargin">
 				<!-- Start content -->
-				<div class="col-md-3 col-sm-3 col-xs-3 colorItem">
+				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorRed">
 					<div class="colorPick red centerX"></div>
 					<p class="colorName">
 						Red
 					</p>
 				</div>
-				<div class="col-md-3 col-sm-3 col-xs-3 colorItem">
+				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorBlue">
 					<div class="colorPick blue centerX"></div>
 					<p class="colorName">
 						Blue
 					</p>
 				</div>
-				<div class="col-md-3 col-sm-3 col-xs-3 colorItem">
+				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorPurple">
 					<div class="colorPick purple centerX"></div>
 					<p class="colorName">
 						Purple
 					</p>
 				</div>
-				<div class="col-md-3 col-sm-3 col-xs-3 colorItem">
+				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorGray">
 					<div class="colorPick gray centerX"></div>
 					<p class="colorName">
 						Gray
 					</p>
 				</div>
-				<div class="col-md-3 col-sm-3 col-xs-3 colorItem">
+				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorTeal">
 					<div class="colorPick teal centerX"></div>
 					<p class="colorName">
 						Teal
 					</p>
 				</div>
-				<div class="col-md-3 col-sm-3 col-xs-3 colorItem">
+				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorOrange">
 					<div class="colorPick orange centerX"></div>
 					<p class="colorName">
 						Orange
@@ -109,7 +109,7 @@
 		<div id="collapse2" class="panel-collapse collapse">
 			<div class="panel-body row nopadding nomargin">
 				<!-- Start content -->
-				<div class="col-md-4 col-sm-4 col-xs-4 item">
+				<div class="col-md-4 col-sm-4 col-xs-4 item" id="rimOne">
 					<span class="fa fa-info-circle infoIcon" data-title="Chrome 13&quot;" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-chrome13" data-img="../media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
 					<img src="media/rim1.png" class="itemImg centerX">
 					<p class="itemName">
@@ -119,7 +119,7 @@
 						546 USD
 					</p>
 				</div>
-				<div class="col-md-4 col-sm-4 col-xs-4 item">
+				<div class="col-md-4 col-sm-4 col-xs-4 item" id="rimTwo">
 					<span class="fa fa-info-circle infoIcon" data-title="Chrome 13&quot;" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-chrome13" data-img="../media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
 					<img src="media/rim1.png" class="itemImg centerX">
 					<p class="itemName">
@@ -129,14 +129,14 @@
 						200 USD
 					</p>
 				</div>
-				<div class="col-md-4 col-sm-4 col-xs-4 item">
+				<div class="col-md-4 col-sm-4 col-xs-4 item" id="rimThree">
 					<span class="fa fa-info-circle infoIcon" data-title="Chrome 13&quot;" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-chrome13" data-img="../media/rim1.png" data-info="sample info text"></span>
 					<img src="media/rim1.png" class="itemImg centerX">
 					<p class="itemName">
 						Chrome12"
 					</p>
 				</div>
-				<div class="col-md-4 col-sm-4 col-xs-4 item">
+				<div class="col-md-4 col-sm-4 col-xs-4 item" id="rimFour">
 					<span class="fa fa-info-circle infoIcon" data-title="Chrome 13&quot;" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-chrome13" data-img="../media/rim1.png" data-info="sample info text"></span>
 					<img src="media/rim1.png" class="itemImg centerX">
 					<p class="itemName">
@@ -177,3 +177,21 @@
 	</a>
 </div>
 <!-- End Config nav -->
+<script>
+	setTimeout(function () {
+        guiController.object.dispatchListeners();
+        guiController.object.addGuiElement('colorRed', document.getElementById("colorRed"));
+        guiController.object.addGuiElement('colorBlue', document.getElementById("colorBlue"));
+        guiController.object.addGuiElement('colorPurple', document.getElementById("colorPurple"));
+        guiController.object.addGuiElement('colorGray', document.getElementById("colorGray"));
+        guiController.object.addGuiElement('colorTeal', document.getElementById("colorTeal"));
+        guiController.object.addGuiElement('colorOrange', document.getElementById('colorOrange'));
+
+        guiController.object.addGuiElement('rimOne', document.getElementById('rimOne'));
+        guiController.object.addGuiElement('rimTwo', document.getElementById('rimTwo'));
+        guiController.object.addGuiElement('rimThree', document.getElementById('rimThree'));
+        guiController.object.addGuiElement('rimFour', document.getElementById('rimFour'));
+
+        guiController.object.setListenersForExterior();
+    },1000);
+</script>

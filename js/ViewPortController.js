@@ -6,7 +6,7 @@
  * */
 
 //number of viewports,
-THREE.ViewPortController = function (orbitController, viewPorts, guiElement) {
+THREE.ViewPortController = function (orbitController, viewPorts, guiElement, camera) {
     const INTERVAL_CLOSURE_Z = 26;
     const CENTER_POINT = new THREE.Vector3(50,0,15);
     const PAN_POSITION = new THREE.Vector2(520,290);
@@ -21,6 +21,7 @@ THREE.ViewPortController = function (orbitController, viewPorts, guiElement) {
     this.orbitController = orbitController;
     var nearViewPorts = [];
     var clickDisabled = false;
+    var currentVectorPosition = camera.position;
 
     //TODO Initialize default viewport
     /**
@@ -169,7 +170,7 @@ THREE.ViewPortController = function (orbitController, viewPorts, guiElement) {
                 resetState();
                 viewPort = scope.viewPorts.find(findViewPortById);
                 viewPort.object.setViewState(true);
-                _controls.autoRotate = true;
+                scope.orbitController.autoRotate = true;
                 defaultViewPort.attachViewPort(viewPort);
                 _startDistance = defaultViewPort.distance();
             }
@@ -239,8 +240,8 @@ THREE.ViewPortController = function (orbitController, viewPorts, guiElement) {
      * */
     function rotationDirection() {
         if((defaultViewPort.distance() - _startDistance) > 0){
-            _controls.autoRotate = false;
-            _controls.autoRotateNegative = true;
+            scope.orbitController.autoRotate = false;
+            scope.orbitController.autoRotateNegative = true;
         }
     }
     /**

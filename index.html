@@ -22,6 +22,7 @@
 	<script src="js/DefaultViewPort.js"></script>
 	<script src="js/Detector.js"></script>
 	<script src="CD132_Ford_buck_jt.jt.json/models.js"></script>
+	<script src="js/GUIController.js"></script>
 </head>
   
 <body>
@@ -147,288 +148,31 @@
 	<!-- End Modals -->
 
 	<script>
-	    //TODO remove that ur able to stop rotation on change camera view animation
-	    var scene;
-	    var camera;
-	    var _controls;
-	    var container;
-	    var geometryArray;
-	    var currentVectorPosition = new THREE.Vector3(0,0,0);
-	    var movingCamera;
-	    var viewPortController;
-	    var stats;
-	    //Keeps track of all camera views
-	    var RESET_BUTTON_PRESSED = false;
-	    var reset_Button = document.getElementById("resetButton");
-	    reset_Button.style.display = 'none';
-	    var viewPorts = [];
-	    //camera nav variables
+		var guiController = new GUIController();
 
-	    ///TODO GET all parts that is going to change the color with color clicked
-	    const bodyElements = [
-	        'Ejector Door [12] (2)'
-	    ];
+		guiController.object.addGuiElement('container',document.getElementById('container'));
 
-	    //Programming color values
-	    const colors = {
-	        colorWhite: 0xffffff,
-	        colorBlack: 0x000000,
-	        colorBlue: 0x0000ff,
-	        colorRed: 0xff0000,
-	        colorGrey: 0x7a7a7a,
-	        colorAqua: 0x00ffff
-	    };
+		guiController.object.addGuiElement('side', document.getElementById('side'));
+		guiController.object.addGuiElement('sidetext', document.getElementById("sidetext"));
+        guiController.object.addGuiElement('sidebutton', document.getElementById("sidebutton"));
 
-	    //New patched framework for raycaster in three.js now working
-	    //with jtviewer
-	    var raycaster = new THREE.Raycaster();
-	    var newCaster = new THREE.Raycaster();
-	    var mouse = new THREE.Vector2(), INTERSECTED;
-	    setViewPorts();
-	    initializeScene();
-	    function setViewPorts() {
-	        //Vectors
-	        //vector front
-	        //
+        guiController.object.addGuiElement('front', document.getElementById("front"));
+        guiController.object.addGuiElement('fronttext', document.getElementById("fronttext"));
+        guiController.object.addGuiElement('frontbutton', document.getElementById("frontbutton"));
 
-	        //vector back
-	        //
+		guiController.object.addGuiElement('back',document.getElementById("back"));
+		guiController.object.addGuiElement('backtext', document.getElementById("backtext"));
+		guiController.object.addGuiElement('backbutton', document.getElementById('backbutton'));
 
-	        //vector side
-	        //
+		guiController.object.addGuiElement('interior', document.getElementById("interior"));
+		guiController.object.addGuiElement('interiortext', document.getElementById("interiortext"));
+		guiController.object.addGuiElement('interiorbutton',document.getElementById("interiorbutton"));
 
-	        //vector interior
-	        //viewPorts.push(new THREE.ViewPort(new THREE.Vector3(50,0,18)));
-	        //distance to zeroplane 58
+		guiController.object.addGuiElement('resetButton', document.getElementById('resetButton'));
 
-	        viewPorts.push(new THREE.ViewPort(new THREE.Vector3(50,-88,40),false,
-	            document.getElementById('side'), document.getElementById("sidetext"),
-	            document.getElementById("sidebutton")));
-	        viewPorts.push(new THREE.ViewPort(new THREE.Vector3(-35,0,40), false,
-	            document.getElementById("front"), document.getElementById("fronttext"),
-	            document.getElementById("frontbutton")));
-	        viewPorts.push(new THREE.ViewPort(new THREE.Vector3(136, 0,40), false,
-	            document.getElementById("back"), document.getElementById("backtext"),
-	            document.getElementById("backbutton")));
-	        viewPorts.push(new THREE.ViewPort(new THREE.Vector3(50,0,18),false,
-	            document.getElementById("interior"), document.getElementById("interiortext"),
-	            document.getElementById("interiorbutton")));
-	    }
-	    animateScene();
+		guiController.object.addGuiElement('cameraButtons', document.getElementById('cameraButtons'));
 
-	    function initializeScene(){
-	        /*setTimeout(function () {
-	            //document.body.children[2].style.display="none";
-	        },10);*/
-
-	        if(!Detector.webgl){
-	            Detector.addGetWebGLMessage();
-	            return;
-	        }
-	        raycaster = new THREE.Raycaster();
-	        newCaster = new THREE.Raycaster();
-	        container = document.getElementById("container");
-
-	        containerWidth = container.clientWidth;
-	        containerHeight = container.clientHeight;
-	        renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
-	        renderer.setPixelRatio(window.devicePixelRatio);
-	        renderer.setSize(containerWidth, containerHeight);
-	        container.appendChild(renderer.domElement);
-
-	        // Add object picking
-	        projector = new THREE.Projector();
-	        mouseVector = new THREE.Vector3();
-
-	        //Adding object on camera for colletion detection
-	        var cameraCube = new THREE.CubeGeometry(20,20,20,1,1,1);
-	        var wireMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe:true});
-	        movingCamera = new THREE.Mesh( cameraCube, wireMaterial );
-	        movingCamera.position.set(0,0,0);
-
-	        scene = new THREE.Scene();
-	        camera = new THREE.PerspectiveCamera(45, containerWidth / containerHeight, 1, 1000);
-	        camera.position.set(0, -20, 100);
-	        camera.up.set( 0, 0, 1 );
-
-	        //camera initialized
-	        //adding movingCamera object to the camera object
-	        //for tracking the collisions
-	        camera.lookAt(scene.position);
-	        //camera.add(movingCamera);
-	        scene.add(camera);
-
-	        var grid = new THREE.GridHelper(400,400, 0xffffff, 0x555555);
-	        // scene.add(grid);
-	        _controls = new THREE.OrbitControls(camera, renderer.domElement, document);
-	        _controls.panSpeed = 0.8;
-	        _controls.noPan = false;
-	        viewPortController = new THREE.ViewPortController(_controls,viewPorts, document.getElementById("cameraButtons"));
-
-	        geometryArray = new Object();
-
-	        loadJSON(jsonFileNames,numberOfJSONFiles,boundingBoxMinimum,boundingBoxMaximum);
-	        //loadJSON(jsonFileNamesFord,numberOfJSONFilesFord,boundingBoxMinimumFord,boundingBoxMaximumFord);
-
-	        pointLight = new THREE.PointLight(0xffffff, 1.0);
-	        pointLight.position.copy(camera.position);
-	        camera.add(pointLight);
-	        window.addEventListener("mousemove", onMouseMove, false);
-	        window.addEventListener("resize", onWindowResize, false);
-	        _controls.addEventListener('change', render);
-	        addListenersToColors();
-	        function addListenersToColors() {
-	          /*  document.getElementById("colorWhite").addEventListener("click",colorClicked);
-	            document.getElementById("colorBlack").addEventListener("click",colorClicked);
-	            document.getElementById("colorBlue").addEventListener("click",colorClicked);
-	            document.getElementById("colorRed").addEventListener("click",colorClicked);
-	            document.getElementById("colorGrey").addEventListener("click",colorClicked);*/
-
-	            //TODO HIde when not a distance away form the deafult view
-	            //  document.getElementById("resetButton").addEventListener("click", setNewDefaultView);
-	        }
-	        stats = new Stats();
-
-	        container.appendChild(stats.dom);
-
-	    }
-	    function loadJSON(jsonFileNames, numberOfJSONFiles, boundingBoxMinimum,boundingBoxMaximum) {
-	        var scaleFactor = calculateScaleFactor(boundingBoxMinimum, boundingBoxMaximum);
-	        var loader = new THREE.JSONLoader();
-	        /**
-	         * Loads le json files and add a reff id _jsonLink
-	         * to each mesh name, so It can be trace when something is gonna
-	         * be changed with that specific mesh
-	         *
-	         * XD:D:D:
-	         * */
-	        for(var _json in jsonFileNames) {
-	            //  console.log("layerlink" + jsonFileNames[_json]);
-	            var _jsonLink = jsonFileNames[_json];
-	            (function (link) {
-	                loader.load(
-	                    // resource URL
-	                    _json,
-	                    // onLoad callback
-	                    function (geometry, materials) {
-	                        // console.log("jaja" + link);
-	                        var mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
-	                            side: THREE.DoubleSide
-	                        }));
-	                        mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
-	                        mesh.name = link;
-	                        scene.add(mesh);
-	                        geometryArray[link] = mesh;
-	                        if ((scene.children.length - 1) == numberOfJSONFiles) {
-	                            fitAll(scene);
-	                        }
-
-	                    },
-	                    // onProgress callback
-	                    function (xhr) {
-	                        //      console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-	                    },
-
-	                    // onError callback
-	                    function (err) {
-	                        //        console.log('An error happened');
-	                    }
-	                );
-	            })(_jsonLink);
-	        }
-	    }
-
-	    //TODO get all ids that going to change on a click
-	    function colorClicked(event){
-	        for(var i = 0; i < bodyElements.length; i+=1){
-	            if( bodyElements[i] !== undefined ){
-	                geometryArray[bodyElements[i]].material.color.setHex( colors[event.target.id] );
-	                break;
-	            }
-	        }
-	    }
-
-	    function onWindowResize(resizeEvent){
-	        renderer.setSize(container.clientWidth, container.clientHeight);
-	        camera.aspect = container.clientWidth / container.clientHeight;
-	        camera.updateProjectionMatrix();
-	    }
-
-	    function onMouseMove(event){
-	        event.preventDefault();
-	        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-	    }
-
-	    //TODO add rotation around x axis only
-	    function setForOnlyNavigationAroundXAxis() {
-	        _controls.minPolarAngle = Math.PI;
-	        _controls.maxPolarAngle = Math.PI/2;
-	    }
-
-
-	    /**
-	     * Scale each mesh based on vertexs in each json that being loaded.
-	     * */
-	    function calculateScaleFactor(boundingBoxMinimum, boundingBoxMaximum){
-	        // Get bounding box size
-	        var bBoxSize = [(boundingBoxMaximum[0] - boundingBoxMinimum[0]),
-	            (boundingBoxMaximum[1] - boundingBoxMinimum[1]),
-	            (boundingBoxMaximum[2] - boundingBoxMinimum[2])];
-	        // Detect largest dimension
-	        var largestSize = bBoxSize[0];
-	        if(bBoxSize[1] > largestSize){
-	            largestSize = bBoxSize[1];
-	        }
-	        if(bBoxSize[2] > largestSize){
-	            largestSize = bBoxSize[2];
-	        }
-
-	        // Scale dimension to 100
-	        return 100.0 / largestSize;
-	    }
-
-	    /**
-	     * Fit the content together in the scene
-	     * */
-	    function fitAll(node){
-	        // Calculate bounding box of the whole scene
-	        var boundingBoxOfNode = new THREE.Box3().setFromObject(node);
-	        var centerOfGravity = boundingBoxOfNode.center();
-	        var newCameraPosition = new THREE.Vector3();
-	        newCameraPosition.subVectors(centerOfGravity, _controls.target);
-	        camera.position.addVectors(camera.position, newCameraPosition);
-	        camera.lookAt(centerOfGravity);
-	        _controls.target.set(centerOfGravity.x, centerOfGravity.y, centerOfGravity.z);
-
-	        // Move camera along z until the object fits into the screen
-	        var sphereSize = boundingBoxOfNode.size().length() * 0.5;
-	        var distToCenter = sphereSize / Math.sin(Math.PI / 180.0 * camera.fov * 0.5);
-	        var target = _controls.target;
-	        var vec = new THREE.Vector3();
-	        vec.subVectors(camera.position, target);
-	        vec.setLength(distToCenter);
-	        camera.position.addVectors(vec , target);
-	    }
-
-	    function animateScene(){
-	        _controls.update();
-	        requestAnimationFrame(animateScene);
-	        renderScene();
-	    }
-	    function renderScene(){
-	        render();
-	        stats.update();
-	        renderer.render(scene, camera);
-	    }
-	    function render() {
-	        camera.updateMatrixWorld();
-	        currentVectorPosition.set(camera.position.x, camera.position.y, camera.position.z);
-	        _controls.updateCurrent3DVector(currentVectorPosition);
-	        viewPortController.update(currentVectorPosition);
-	        renderer.render(scene, camera);
-	    }
-
+		guiController.initializeWEBGL();
 	</script>
 	<!-- End Scripts -->
 </body>
