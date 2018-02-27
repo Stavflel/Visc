@@ -9,6 +9,7 @@
 THREE.ViewPortController = function (orbitController, viewPorts, guiElement) {
     const INTERVAL_CLOSURE_Z = 26;
     const CENTER_POINT = new THREE.Vector3(50,0,15);
+    const PAN_POSITION = new THREE.Vector2(520,290);
     const MAX_Z_POSITION = 55;
     const MIN_Z_POSITION = 30;
     const _DISTANCE_TO_ZERO_PLANE = 93;
@@ -147,16 +148,19 @@ THREE.ViewPortController = function (orbitController, viewPorts, guiElement) {
             var viewPort;
             if ( event.target.id === 'front' || event.target.id === 'frontbutton'  || event.target.id === 'fronttext' ) {
                 _eventID = 'front';
+                moveToCenterOfGravity();
                 startMoving();
                 setGUIValuesOnCamera();
             }
             else if( event.target.id === 'back' || event.target.id === 'backbutton'  || event.target.id === 'backtext'  ) {
                 _eventID = 'back';
+                moveToCenterOfGravity();
                 startMoving();
                 setGUIValuesOnCamera();
             }
             else if( event.target.id === 'side' || event.target.id === 'sidebutton'  || event.target.id === 'sidetext'  ) {
                 _eventID = 'side';
+                moveToCenterOfGravity();
                 startMoving();
                 setGUIValuesOnCamera();
             }
@@ -294,6 +298,10 @@ THREE.ViewPortController = function (orbitController, viewPorts, guiElement) {
             }
         }
         defaultZoom();
+    }
+
+    function moveToCenterOfGravity(){
+        scope.orbitController.updatePanPosition(CENTER_POINT);
     }
     //TODO a func that checks if it is out side a set boundary
     // Cause of lagg issuse with low fps :///

@@ -150,6 +150,9 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
         }
 
     };
+    this.updatePanPosition = function (centerOfGravity) {
+        scope.newTarget.copy(centerOfGravity);
+    };
     // this method is exposed, but perhaps it would be better if we can make it private...
     this.update = function () {
 
@@ -321,20 +324,15 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
     }
 
     function rotateLeft( angle ) {
-      //  console.log("sphericalDelta: " + sphericalDelta.theta);
         sphericalDelta.theta -= angle;
-
     }
 
     function rotateUp( angle ) {
-        console.log("Up angle? : " + angle);
-       // console.log(" Up sphericalDelta: " + sphericalDelta.phi);
         sphericalDelta.phi -= angle;
 
     }
 
     var panLeft = function () {
-
         var v = new THREE.Vector3();
 
         return function panLeft( distance, objectMatrix ) {
@@ -349,14 +347,12 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
     }();
 
     var panUp = function () {
-
         var v = new THREE.Vector3();
 
         return function panUp( distance, objectMatrix ) {
 
             v.setFromMatrixColumn( objectMatrix, 1 ); // get Y column of objectMatrix
             v.multiplyScalar( distance );
-
             panOffset.add( v );
 
         };
@@ -376,6 +372,7 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
 
                 // perspective
                 var position = scope.object.position;
+
                 offset.copy( position ).sub( scope.target );
                 var targetDistance = offset.length();
 
@@ -407,9 +404,7 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
     function dollyIn( dollyScale ) {
 
         if ( scope.object.isPerspectiveCamera ) {
-            console.log("zoom out" + scale);
             scale /= dollyScale;
-
         } else if ( scope.object.isOrthographicCamera ) {
 
             scope.object.zoom = Math.max( scope.minZoom, Math.min( scope.maxZoom, scope.object.zoom * dollyScale ) );
@@ -467,9 +462,6 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
     }
 
     function handleMouseDownPan( event ) {
-
-        //console.log( 'handleMouseDownPan' );
-
         panStart.set( event.clientX, event.clientY );
 
     }
@@ -521,6 +513,7 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
     function handleMouseMovePan( event ) {
 
         //console.log( 'handleMouseMovePan' );
+
 
         panEnd.set( event.clientX, event.clientY );
 
@@ -746,7 +739,6 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
     }
 
     function onMouseMove( event ) {
-
         if ( scope.enabled === false ) return;
 
         event.preventDefault();
@@ -770,11 +762,8 @@ THREE.OrbitControls = function ( object, domElement, gui , defaultViews ) {
                 break;
 
             case STATE.PAN:
-
                 if ( scope.enablePan === false ) return;
-
                 handleMouseMovePan( event );
-
                 break;
 
         }
