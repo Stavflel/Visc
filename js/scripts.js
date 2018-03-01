@@ -56,6 +56,7 @@ $(document).ready(function () {
 function changeModelName(name)
 {
     document.getElementById("modelName").innerHTML = name;
+    $("#carImg").attr("src", 'media/fordthumb.png');
 }
 
 function saveSession(name, value){

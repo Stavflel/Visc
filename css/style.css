@@ -177,11 +177,7 @@ h4.panel-title a .fa-caret-down {
 }
 
 .blue {
-  background: #13b4ff;
-}
-
-.purple {
-  background: black;
+  background: #0044b2;
 }
 
 .red {
@@ -189,18 +185,18 @@ h4.panel-title a .fa-caret-down {
 }
 
 .orange{
-  background: #e5841d;
+  background: #e2bd36;
 }
 
 .gray{
   background: #ccc9c5;
 }
 
-.teal{
+.white{
   background: white;
 }
 
-.pink{
+.black{
   background: black;
 }
 
@@ -223,12 +219,6 @@ h4.panel-title a .fa-caret-down {
     top: 0;
     width: 100%;
     text-align: center;
-}
-#cameraButtons .button  {
-    border-radius: 5px;
-}
-#cameraButtons .buttoninactive  {
-    border-radius: 5px;
 }
 #backgroundButton{
     position: absolute;
@@ -335,7 +325,7 @@ h4.panel-title a .fa-caret-down {
 }
 #cameraButtons .button{
     min-width: 100px;
-    min-height: 5px;
+    min-height: 10px;
     background: black;
     opacity: 0.5;
     display: inline-block;
