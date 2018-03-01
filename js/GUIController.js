@@ -20,6 +20,7 @@ GUIController = function () {
     var rayCaster;
     var newCaster;
     var mouse = new THREE.Vector2(), INTERSECTED;
+    var FLOOR = -250;
 
     this.object = (function () {
         var guiElements = new Object();
@@ -135,6 +136,23 @@ GUIController = function () {
             camera.position.set(0, -20, 100);
             camera.up.set(0, 0, 1);
 
+            var geometry = new THREE.CircleBufferGeometry( 100, 100);
+            var planeMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, side: THREE.DoubleSide } );
+            var ground = new THREE.Mesh( geometry, planeMaterial );
+
+            ground.position.set( 50, 0, 3 );
+            ground.scale.set( 0.5, 0.5, 0.5);
+            ground.castShadow = false;
+            ground.receiveShadow = false;
+            scene.add( ground );
+
+            var circleThickness = [];
+            for(var i=0.1; i<5 ; i+= 0.1) {
+                circleThickness[i] = ground.clone();
+                circleThickness[i].position.set(50,0, 3-i);
+                circleThickness[i].updateMatrix();
+                scene.add( circleThickness[i] );
+            }
             //camera initialized
             //adding movingCamera object to the camera object
             //for tracking the collisions
@@ -150,7 +168,7 @@ GUIController = function () {
             viewPortController = new THREE.ViewPortController(_controls, viewPorts, scope.object.getGuiElements()['cameraButtons'], camera);
 
             geometryArray = new Object();
-
+            /* Floor  */
             loadJSON(jsonFileNames, numberOfJSONFiles, boundingBoxMinimum, boundingBoxMaximum);
             //loadJSON(jsonFileNamesFord,numberOfJSONFilesFord,boundingBoxMinimumFord,boundingBoxMaximumFord);
 
@@ -165,6 +183,7 @@ GUIController = function () {
             stats = new Stats();
             container.appendChild(stats.dom);
 
+            setForOnlyNavigationAroundXAxis();
         }
 
         function loadJSON(jsonFileNames, numberOfJSONFiles, boundingBoxMinimum, boundingBoxMaximum) {
@@ -202,7 +221,7 @@ GUIController = function () {
                         },
                         // onProgress callback
                         function (xhr) {
-                                  console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+                               //   console.log((xhr.loaded / xhr.total * 100) + '% loaded');
                         },
 
                         // onError callback
@@ -227,7 +246,7 @@ GUIController = function () {
 
         //TODO add rotation around x axis only
         function setForOnlyNavigationAroundXAxis() {
-            _controls.minPolarAngle = Math.PI;
+            _controls.minPolarAngle = -Math.PI;
             _controls.maxPolarAngle = Math.PI / 2;
         }
 
