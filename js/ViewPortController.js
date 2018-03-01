@@ -13,6 +13,7 @@ THREE.ViewPortController = function (orbitController, viewPorts, guiElement, cam
     const MAX_Z_POSITION = 55;
     const MIN_Z_POSITION = 30;
     const _DISTANCE_TO_ZERO_PLANE = 93;
+    const _DISTANCE_TO_ZERO_PLANE_INTERIOR = 5;
     var _startDistance = 0;
     this.gui = new Object();
     var scope = this;
@@ -91,20 +92,17 @@ THREE.ViewPortController = function (orbitController, viewPorts, guiElement, cam
      * */
     this.update = function (currentViewPos) {
         defaultViewPort.setViewPosition(currentViewPos);
-        //console.log("distance to zero plane " + defaultViewPort.distanceToCenterPoint());
-       /* console.log("le view port?x  " + defaultViewPort.getViewPosition().x);
-         console.log("le view port?y  " + defaultViewPort.getViewPosition().y);
-        console.log("le view port?z +" + defaultViewPort.getViewPosition().z);*/
         if( defaultViewPort !== undefined ){
-            if( defaultViewPort.getViewPort().object.getViewState() === true ){
-             //   console.log("moving");
+            if( defaultViewPort.getViewPort().object.getViewState() === true  && defaultViewPort.getViewPort().object.getId() !== 'interior'){
                 //TODO move to view port
                 moveToViewPort();
-            }/*Älse if( defaultViewPort.getViewPort().object.getViewState() === false){
-                console.log("check boundaries");
-                checkBoundaries();
-            }*/
-
+            }else if(defaultViewPort.getViewPort().object.getViewState() === true){
+               /* console.log("add interior movement");
+                console.log("distance to zero plane x " + defaultViewPort.getViewPort().object.getPosition().x);
+                console.log("distance to zero plane y " + defaultViewPort.getViewPort().object.getPosition().y);
+                console.log("distance to zero plane z " + defaultViewPort.getViewPort().object.getPosition().z);*/
+                moveToInterior();
+            }
         }
     };
 
@@ -142,35 +140,47 @@ THREE.ViewPortController = function (orbitController, viewPorts, guiElement, cam
     function viewPortListener(event) {
         console.log("wahaw" + event.target.id);
         var _eventID = '';
-        //resetOldDefault('');
-            if(clickDisabled) {
-                return;
-            }
+
             var viewPort;
-            if ( event.target.id === 'front' || event.target.id === 'frontbutton'  || event.target.id === 'fronttext' ) {
+            if ( this.id === 'front' || this.id === 'frontbutton'  || this.id === 'fronttext' ) {
                 _eventID = 'front';
                 moveToCenterOfGravity();
                 startMoving();
                 setGUIValuesOnCamera();
             }
-            else if( event.target.id === 'back' || event.target.id === 'backbutton'  || event.target.id === 'backtext'  ) {
+            else if( this.id === 'back' || this.id === 'backbutton'  || this.id === 'backtext'  ) {
                 _eventID = 'back';
                 moveToCenterOfGravity();
                 startMoving();
                 setGUIValuesOnCamera();
             }
-            else if( event.target.id === 'side' || event.target.id === 'sidebutton'  || event.target.id === 'sidetext'  ) {
+            else if( this.id === 'side' || this.id === 'sidebutton'  || this.id === 'sidetext'  ) {
                 _eventID = 'side';
                 moveToCenterOfGravity();
                 startMoving();
+                setGUIValuesOnCamera();
+            }else if( this.id === 'interior' || this.id === 'interiorbutton'  || this.id === 'interiortext'  ) {
+                _eventID = 'interior';
+                moveToCenterOfGravity();
+                startMovingToInterior();
                 setGUIValuesOnCamera();
             }
             function startMoving (){
                 resetOldDefault('');
                 resetState();
+                console.log("in rotation start movinmg");
                 viewPort = scope.viewPorts.find(findViewPortById);
                 viewPort.object.setViewState(true);
                 scope.orbitController.autoRotate = true;
+                defaultViewPort.attachViewPort(viewPort);
+                _startDistance = defaultViewPort.distance();
+            }
+            function startMovingToInterior(){
+                resetOldDefault('');
+                resetState();
+                console.log("in rotation start movinmg");
+                viewPort = scope.viewPorts.find(findViewPortById);
+                viewPort.object.setViewState(true);
                 defaultViewPort.attachViewPort(viewPort);
                 _startDistance = defaultViewPort.distance();
             }
@@ -218,10 +228,6 @@ THREE.ViewPortController = function (orbitController, viewPorts, guiElement, cam
                 return value.object.getId() === _eventID;
             }
 
-         clickDisabled = true;
-         setTimeout(function () {
-            clickDisabled = false;
-         },2000);
 
     }
     /**
@@ -229,16 +235,21 @@ THREE.ViewPortController = function (orbitController, viewPorts, guiElement, cam
      * @param id the element id
      * */
     function resetOldDefault(id) {
-        scope.viewPorts.filter(function (value) {
+        /*scope.viewPorts.filter(function (value) {
             if( value.object.getId() !== id && value.object.getViewState() === true ){ value.object.setViewState(false) }
-        });
+        });*/
+        for(var i = 0; i < scope.viewPorts.length; i+=1){
+            scope.viewPorts[i].object.setViewState(false);
+        }
     }
 
     /**
      * Check which direction for the rotation
      * based on distance to the new viewport position.
+     * //TODO not working properly need to fix this
      * */
     function rotationDirection() {
+     //   console.log("in rotation");
         if((defaultViewPort.distance() - _startDistance) > 0){
             scope.orbitController.autoRotate = false;
             scope.orbitController.autoRotateNegative = true;
@@ -265,7 +276,7 @@ THREE.ViewPortController = function (orbitController, viewPorts, guiElement, cam
                 < defaultViewPort.getViewPort().object.getPosition().x + 5;
         }
     }
-    function checkIfZeroOnNoneZeroAxis(){
+    function checkIfZeroOnNoneZeroAxis()    {
         if(scope.axis().zeroAxis() === 1){
             return defaultViewPort.getAxisPosition(scope.axis().zeroAxis()) < 15 &&
                 defaultViewPort.getAxisPosition(scope.axis().zeroAxis()) > 0;
@@ -277,8 +288,21 @@ THREE.ViewPortController = function (orbitController, viewPorts, guiElement, cam
                defaultViewPort.getAxisPosition(defaultViewPort.getViewPortAxisPosition(scope.axis().minValue())) - 15
         }
     }
+
+    function moveToInterior() {
+        if(defaultViewPort.distanceToCenterPoint() < 6){
+            resetOldDefault('');
+        }else if (defaultViewPort.distanceToCenterPoint() > _DISTANCE_TO_ZERO_PLANE_INTERIOR ) {
+            //console.log("move ot interior zoom out");
+            scope.orbitController.updateZoom('out');
+        }
+        else if (defaultViewPort.distanceToCenterPoint() < _DISTANCE_TO_ZERO_PLANE_INTERIOR + 5) {
+          //  console.log("move ot interior zoom in");
+            scope.orbitController.updateZoom('in');
+        }
+    }
     function moveToViewPort() {
-        rotationDirection();
+       // rotationDirection();
         if (currentVectorPosition.z > MAX_Z_POSITION) {
            // console.log("max min");
             scope.orbitController.updateRotationUp('down');

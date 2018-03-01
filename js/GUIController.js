@@ -21,6 +21,7 @@ GUIController = function () {
     var newCaster;
     var mouse = new THREE.Vector2(), INTERSECTED;
     var FLOOR = -250;
+    var renderer;
 
     this.object = (function () {
         var guiElements = new Object();
@@ -101,7 +102,6 @@ GUIController = function () {
             /*setTimeout(function () {
                 //document.body.children[2].style.display="none";
             },10);*/
-
             if (!Detector.webgl) {
                 Detector.addGetWebGLMessage();
                 return;
@@ -119,6 +119,9 @@ GUIController = function () {
             renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.setSize(containerWidth, containerHeight);
+            renderer.gammaInput = true;
+            renderer.gammaOutput = true;
+            renderer.shadowMap.enabled = true;
             container.appendChild(renderer.domElement);
 
             // Add object picking
@@ -133,17 +136,23 @@ GUIController = function () {
 
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(45, containerWidth / containerHeight, 1, 1000);
-            camera.position.set(0, -20, 100);
+            camera.position.set(0, -20, 50);
             camera.up.set(0, 0, 1);
 
+            var light = new THREE.SpotLight();
+            light.angle = Math.PI / 16;
+            light.penumbra = 0.5;
+            light.castShadow = true;
+            light.position.set( 600, 0, 600 );
+            scene.add( light );
+
             var geometry = new THREE.CircleBufferGeometry( 100, 100);
-            var planeMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, side: THREE.DoubleSide } );
+            var planeMaterial = new THREE.MeshPhongMaterial( { color: 0x00000, side: THREE.DoubleSide, specular: 0x101010 } );
             var ground = new THREE.Mesh( geometry, planeMaterial );
 
-            ground.position.set( 50, 0, 3 );
+            ground.position.set( 50, 0, 2.5 );
             ground.scale.set( 0.5, 0.5, 0.5);
-            ground.castShadow = false;
-            ground.receiveShadow = false;
+            ground.receiveShadow = true;
             scene.add( ground );
 
             var circleThickness = [];
@@ -173,9 +182,10 @@ GUIController = function () {
             //loadJSON(jsonFileNamesFord,numberOfJSONFilesFord,boundingBoxMinimumFord,boundingBoxMaximumFord);
 
 
-            pointLight = new THREE.PointLight(0xffffff, 1);
+            /*pointLight = new THREE.PointLight(0xffffff, 1);
             pointLight.position.copy(camera.position);
-            camera.add(pointLight);
+            camera.add(pointLight);*/
+
 
             window.addEventListener("mousemove", onMouseMove, false);
             window.addEventListener("resize", onWindowResize, false);
@@ -184,6 +194,7 @@ GUIController = function () {
             container.appendChild(stats.dom);
 
             setForOnlyNavigationAroundXAxis();
+            _controls.maxDistance = 300;
         }
 
         function loadJSON(jsonFileNames, numberOfJSONFiles, boundingBoxMinimum, boundingBoxMaximum) {
@@ -211,6 +222,8 @@ GUIController = function () {
                             }));
                             mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
                             mesh.name = link;
+                            mesh.castShadow = true;
+                            mesh.receiveShadow = true;
                             scene.add(mesh);
                             geometryArray[link] = mesh;
                             if ((scene.children.length - 1) == numberOfJSONFiles) {

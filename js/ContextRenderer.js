@@ -8,9 +8,9 @@ ContextRender =  function (texture, _guiController) {
         colorBlue: 0x0000ff,
         colorRed: 0xff0000,
         colorGrey: 0x7a7a7a,
-        colorAqua: 0x00ffff,
+        colorAqua: 0xffffff,
         colorOrange: 0xffa500,
-        colorPurple: 0xe300ff
+        colorPurple: 0x000000
     };
 
     this.object = (function (_texture) {
@@ -106,11 +106,11 @@ ContextRender =  function (texture, _guiController) {
             case 'rimOne':
                 return new THREE.MeshLambertMaterial( { side: THREE.DoubleSide, color: colors.colorWhite, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.8 } );
             case 'rimTwo':
-                return new THREE.MeshLambertMaterial( { side: THREE.DoubleSide, color: colors.colorBlack, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.8 } );
+                return new THREE.MeshLambertMaterial( { side: THREE.DoubleSide, color: colors.colorBlack, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.02 } );
             case 'rimThree':
-                return new THREE.MeshLambertMaterial( { side: THREE.DoubleSide, color: colors.colorBlue, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.8 } );
+                return new THREE.MeshLambertMaterial( { side: THREE.DoubleSide, color: colors.colorBlue, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.6 } );
             case 'rimFour':
-                return new THREE.MeshLambertMaterial( { side: THREE.DoubleSide, color: colors.colorRed, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.8 } );
+                return new THREE.MeshLambertMaterial( { side: THREE.DoubleSide, color: colors.colorRed, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.02 } );
             default:
         }
     }
@@ -123,11 +123,11 @@ ContextRender =  function (texture, _guiController) {
             case 'colorPurple':
                 return new THREE.MeshLambertMaterial( {side: THREE.DoubleSide, color: colors.colorPurple, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.3 } );
             case 'colorGray':
-                return new THREE.MeshLambertMaterial( {side: THREE.DoubleSide, color: colors.colorGrey, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.3 } );
+                return new THREE.MeshLambertMaterial( {side: THREE.DoubleSide, color: colors.colorGrey, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0, specular: 0} );
             case 'colorTeal':
-                return new THREE.MeshLambertMaterial( {side: THREE.DoubleSide, color: colors.colorAqua, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.3 } );
+                return new THREE.MeshLambertMaterial( {side: THREE.DoubleSide, color: colors.colorAqua, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0 } );
             case 'colorOrange':
-                return new THREE.MeshLambertMaterial( {side: THREE.DoubleSide, color: colors.colorOrange, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.3 } );
+                return new THREE.MeshLambertMaterial( {side: THREE.DoubleSide, color: colors.colorOrange, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.05 } );
             default:
         }
     }
