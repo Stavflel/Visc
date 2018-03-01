@@ -135,10 +135,10 @@ ContextRender =  function (texture, _guiController) {
         return new THREE.MeshLambertMaterial( { side: THREE.DoubleSide, color: colors.colorWhite, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.8 } );
     }
     function textureLights() {
-        return new THREE.MeshLambertMaterial( { side: THREE.DoubleSide, color: colors.colorWhite, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.8 } );
+        return new THREE.MeshLambertMaterial( { side: THREE.DoubleSide, color: colors.colorWhite, envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.1 } );
     }
     function textureInnerLights(){
-        return new THREE.MeshLambertMaterial( { side: THREE.DoubleSide, color: colors.colorRed,envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.8 } );
+        return new THREE.MeshLambertMaterial( { side: THREE.DoubleSide, color: colors.colorRed,envMap: scope.object.getTexture(), combine: THREE.MixOperation, reflectivity: 0.8, shininess:200, blending: THREE.AdditiveBlending } );
     }
     function textureMirrors() {
         return new THREE.MeshLambertMaterial( { side: THREE.DoubleSide, color: 0xff6600, envMap: contextRender.object.getTexture(), combine: THREE.MixOperation , opacity: 0.4} );

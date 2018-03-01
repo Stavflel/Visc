@@ -145,7 +145,16 @@ GUIController = function () {
             light.castShadow = true;
             light.position.set( 600, 0, 600 );
             scene.add( light );
+            var light2 = light.clone();
+            light2.position.set( 0, 600, 0 );
+            scene.add( light2 );
+            var light3 = light2.clone();
+            light3.position.set( 0, 0, 600 );
+            scene.add( light3 );
 
+            var light4 = light3.clone();
+            light4.position.set( 0, 0, -600);
+            scene.add( light4 );
             var geometry = new THREE.CircleBufferGeometry( 100, 100);
             var planeMaterial = new THREE.MeshPhongMaterial( { color: 0x00000, side: THREE.DoubleSide, specular: 0x101010 } );
             var ground = new THREE.Mesh( geometry, planeMaterial );
