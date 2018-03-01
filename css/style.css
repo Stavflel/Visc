@@ -224,6 +224,12 @@ h4.panel-title a .fa-caret-down {
     width: 100%;
     text-align: center;
 }
+#cameraButtons .button  {
+    border-radius: 5px;
+}
+#cameraButtons .buttoninactive  {
+    border-radius: 5px;
+}
 #backgroundButton{
     position: absolute;
     top: 0;
@@ -329,7 +335,7 @@ h4.panel-title a .fa-caret-down {
 }
 #cameraButtons .button{
     min-width: 100px;
-    min-height: 10px;
+    min-height: 5px;
     background: black;
     opacity: 0.5;
     display: inline-block;
