@@ -1,0 +1,177 @@
+.testborder {
+    margin:0px;
+	padding:0px;
+    border: #cdcdcd medium solid;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+.infobox{
+	padding-top:1px;
+}
+.nopadding{
+	padding:0px;
+}
+.nomargin{
+	margin:0px;
+}
+.bottom{
+	position:absolute; bottom:0;
+}
+.current{
+	background-color:gray;
+}
+
+.btn-arrow-right{
+    -webkit-clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
+    clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
+    height: 40px;
+    width: 25%;
+    padding: 0px;
+    margin-left: -4.5%;
+    margin-right: -4.5%;
+}
+
+.btn-arrow-start{
+    -webkit-clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 0% 0%);
+    clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 0% 0%);
+    height: 40px;
+    width: 25%;
+    padding: 0px;
+    margin: 0px;
+    margin-right: -4.5%;
+}
+
+.btn-arrow-end{
+    -webkit-clip-path: polygon(100% 0, 100% 100%, 0% 100%, 25% 50%, 0% 0%);
+    clip-path: polygon(100% 0, 100% 100%, 0% 100%, 25% 50%, 0% 0%);
+    height: 40px;
+    width: 25%;
+    padding: 0px;
+    margin: 0px;
+    margin-left: -4.5%;
+}
+
+.centerXY{
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.centerY{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.centerX{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+h4.panel-title a.collapsed .fa-caret-down {
+        color: #ada9a9 !important;
+        transform: rotate(0deg);
+}
+h4.panel-title a .fa-caret-down {
+        color: #515e64 !important;
+        transform: rotate(180deg);
+}
+
+.infoIcon{
+    position: relative;
+    float: right;
+    margin-right: 5px;
+}
+
+.itemName{
+    text-align: center;
+    font-weight: bold;
+    margin: 0px;
+    margin-top: 3px !important;
+    padding: 0px;
+}
+
+.itemImg{
+    width: 60px;
+    height: 60px;
+    position: relative;
+}
+
+.item{
+    padding-top: 25px;
+}
+
+.colorItem{
+    padding-top: 10px;
+}
+
+.colorName{
+    text-align: center;
+    font-weight: bold;
+    margin: 0px;
+    padding-top: 2px !important;
+    padding-bottom: 5px !important;
+    padding: 0px;
+}
+
+#priceBox{
+    z-index: 10; 
+    position: absolute; 
+    bottom: 40px; 
+    right: 0;
+    background-color: white;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.highlight{
+    background-color: gray;
+    border-radius: 10px;
+}
+
+.colorPick{
+  width: 35px;
+  height: 35px;
+  border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.blue {
+  background: #13b4ff;
+}
+
+.purple {
+  background: #ab3fdd;
+}
+
+.red {
+  background: #ae163e;
+}
+
+.orange{
+  background: #e5841d;
+}
+
+.gray{
+  background: #ccc9c5;
+}
+
+.teal{
+  background: #4dd1ca;
+}
+
+.pink{
+  background: #ff00bb;
+}
+
+.activeBar{
+    background: #666666;
+}
+
+.visitedBar{
+    background: #a0a0a0;
+}

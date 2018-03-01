@@ -1,24 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 		<link rel="stylesheet" href="css/style.css" />
 
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	    <!-- For popup mouseover etc -->
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-		<script src="js/scripts.js"></script>
+	  	
+	  	<script src="js/three.js"></script>
+	  	<script src="js/scripts.js"></script>
+		<script src="js/Projector.js"></script>
+		<script src="js/OrbitControls.js"></script>
+		<script src="js/stats.min.js"></script>
+		<script src="js/ViewPortController.js"></script>
+		<script src="js/ViewPort.js"></script>
+		<script src="js/DefaultViewPort.js"></script>
+		<script src="js/Detector.js"></script>
+		<script src="CD132_Ford_buck_jt.jt.json/models.js"></script>
+		<script src="js/GUIController.js"></script>
+
+		<!-- textbox to follow scroll -->
 		<script type="text/javascript">
+		/*
 			$(document).ready(function ($) {
 			    var element = $('.follow-scroll'),
 			        originalY = element.offset().top;
 			    
 			    // Space between element and top of screen (when scrolling)
-			    var topMargin = 20;
+			    var topMargin = 900;
 			    
 			    // Should probably be set in CSS; but here just for emphasis
 			    element.css('position', 'relative');
@@ -30,10 +45,32 @@
 			            top: scrollTop < originalY
 			                    ? 0
 			                    : scrollTop - originalY + topMargin
-			        }, 300);
+			        }, 200);
 			    });
 			});(jQuery)
+
+			$(function() {
+			    var $sidebar   = $("#sidebar"), 
+			        $window    = $(window),
+			        offset     = $sidebar.offset(),
+			        topPadding = 300;
+
+			    $window.scroll(function() {
+			        if ($window.scrollTop() > offset.top) {
+			            $sidebar.stop().animate({
+			                marginTop: $window.scrollTop() - offset.top + topPadding
+			            });
+			        } else {
+			            $sidebar.stop().animate({
+			                marginTop: 300
+			            });
+			        }
+			    });
+			    
+			});*/
+			  // variables
 		</script>
+		<!-- Marking visited on navbar -->
 		<script type="text/javascript">
 			$(document).ready(function ($) {
 			    if( sessionStorage.getItem('exterior') === 'visited') {
@@ -50,69 +87,458 @@
 	        	$("#summaryBar").addClass("activeBar");
         	});
 		</script>
+		<!-- filling table with choices -->
+		<script type="text/javascript">
+			$(document).ready(function () {
+    			document.getElementById("colourChoice").innerHTML = sessionStorage.getItem('colourChoice');
+    			document.getElementById("rimsChoice").innerHTML = sessionStorage.getItem('rimsChoice');
+        	});
+
+        	$(document).scroll(function(){
+		        if ($(this).scrollTop()>0){
+		            // animate fixed div to small size:
+		            $('#container').stop().animate({ height: 300 , 'padding-top': 20},100);
+		            $('.spacer').stop().animate({ height: 360 , 'padding-top': 20},100);
+		        } else {
+		            //  animate fixed div to original size
+		            $('#container').stop().animate({ height: 790, 'padding-top': 0},100);
+		            $('.spacer').stop().animate({ height: 830 , 'padding-top': 20},100);
+		        }
+		    });
+		</script>
 	</head>
 	<body>
 		<div class="container">
-
-			<!-- Start Visualization -->
-			<div class="col-sm-12 col-md-12 col-lg-12 nomargin nopadding" style="background: red;min-height: 200px;"> <!-- SÄTT SOM HEADEr IST ? https://codepen.io/tomdurkin/pen/nvAjd-->
-
-			</div>
-			<!-- End Visualization -->
-			<hr class="nomargin nopadding" style="height:3px;border: none;background: black;">
-			<!-- Start nav bar -->	
-			<div class="col-sm-8 col-md-8 col-lg-8 nomargin nopadding btn-group configBackground centerX" style="position:relative;top:-25px;">
-				<a type="button" href="model.html" page="model" class="btn btn-default btn-lg btn-arrow-start navBar" id="modelBar">
-					<p class="centerXY">
-						Model
-					</p>
-				</a>
-				<a type="button" href="#" page="exterior" class="btn btn-default btn-lg btn-arrow-right links navBar" id="exteriorBar">
-					<p class="centerXY">
-						Exterior
-					</p>
-				</a>
-				<a type="button" href="#" page="interior" class="btn btn-default btn-lg btn-arrow-right links navBar" id="interiorBar">
-					<p class="centerXY">
-						Interior
-					</p>
-				</a>
-				<a type="button" href="#" page="addons" class="btn btn-default btn-lg btn-arrow-right links navBar" id="addonsBar">
-					<p class="centerXY">
-						Addons
-					</p>
-				</a>
-				<a type="button" href="summary.html" page="summary" class="btn btn-default btn-lg btn-arrow-end navBar" id="summaryBar">
-					<p class="centerXY">
-						Summary
-					</p>
-				</a>
+			<div class="col-md-12 wrapper nomargin nopadding">
+				<!-- Start Visualization -->
+				<div id="container" style="height:790px; background: white;">
+					<div id="cameraButtons">
+						<div class="infocontainer" id="front">
+							<span id="frontbutton" class="button" ></span>
+							<p id="fronttext" class="text">
+								Front
+							</p>
+						</div>
+						<div class="infocontainer" id="side">
+							<span id="sidebutton" class="buttoninactive" ></span>
+							<p id="sidetext" class="textinactive">
+								Side
+							</p>
+						</div>
+						<div class="infocontainer" id="back">
+							<span id="backbutton" class="buttoninactive" ></span>
+							<p id="backtext" class="textinactive">
+								Back
+							</p>
+						</div>
+						<div class="infocontainer" id="interior">
+							<span id="interiorbutton" class="buttoninactive" ></span>
+							<p id="interiortext" class="textinactive">
+								Interior
+							</p>
+						</div>
+					</div>
+				</div>
+				<!-- End Visualization -->
+				<hr class="nomargin nopadding" style="height:3px;border: none;background: black;">
+				<!-- Start nav bar -->	
+				<div class="container">
+					<div class="col-sm-8 col-md-8 col-lg-8 nomargin nopadding btn-group configBackground centerX" style="position:relative;top:-25px;">
+						<a type="button" href="model.html" page="model" class="btn btn-default btn-lg btn-arrow-start navBar" id="modelBar">
+							<p class="centerXY">
+								Model
+							</p>
+						</a>
+						<a type="button" href="#" page="exterior" class="btn btn-default btn-lg btn-arrow-right links navBar" id="exteriorBar">
+							<p class="centerXY">
+								Exterior
+							</p>
+						</a>
+						<a type="button" href="#" page="interior" class="btn btn-default btn-lg btn-arrow-right links navBar" id="interiorBar">
+							<p class="centerXY">
+								Interior
+							</p>
+						</a>
+						<a type="button" href="#" page="addons" class="btn btn-default btn-lg btn-arrow-right links navBar" id="addonsBar">
+							<p class="centerXY">
+								Addons
+							</p>
+						</a>
+						<a type="button" href="summary.html" page="summary" class="btn btn-default btn-lg btn-arrow-end navBar" id="summaryBar">
+							<p class="centerXY">
+								Summary
+							</p>
+						</a>
+					</div>
+				</div>
 			</div>
 			<!-- End nav bar -->
 
+			<div class="spacer">&nbsp;</div>
+
+			<!-- Start choice -->
+			<div class="row">
+				<div class="col-sm-4 col-md-4 col-lg-4">
+					<table class="choicesTable" style="margin-left:auto;">
+						<tr>
+							<th></th>
+							<th>
+								Exterior
+							</th>
+						</tr>
+						<tr>
+							<td class="categoryText">
+								Engine
+							</td>
+							<td id="engineChoice">
+								D4 Automatic Petrol
+							</td>
+						</tr>
+						<tr>
+							<td class="categoryText">
+								Colour
+							</td>
+							<td id="colourChoice">
+								Choice
+							</td>
+						</tr>
+						<tr>
+							<td class="categoryText">
+								Rims
+							</td>
+							<td id="rimsChoice">
+								Choice
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="col-sm-4 col-md-4 col-lg-4">
+					<table class="choicesTable" style="margin:0 auto;">
+						<tr>
+							<th></th>
+							<th>
+								Interior
+							</th>
+						</tr>
+						<tr>
+							<td class="categoryText">
+								Upholstery
+							</td>
+							<td>
+								Comfort Seats
+							</td>
+						</tr>
+						<tr>
+							<td class="categoryText">
+								Colour
+							</td>
+							<td>
+								Hazelnut Leather
+							</td>
+						</tr>
+						<tr>
+							<td class="categoryText">
+								Navigation
+							</td>
+							<td>
+								Garmin Navigation
+							</td>
+						</tr>
+						<tr>
+							<td class="categoryText">
+								Sound
+							</td>
+							<td>
+								Garmin Voice
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="col-sm-4 col-md-4 col-lg-4">
+					<table class="choicesTable">
+						<tr>
+							<th>
+								Addons
+							</th>
+						</tr>
+						<tr>
+							<td>
+								Choice
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Choice
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<!-- End choice -->
+
 			<!-- Start content -->
-			<h2 class="text-center">
+			<h2 class="text-center" style="margin-top:30px;">
 				Full Specification
 			</h2>
 			<div class="row">
 				<div class="col-sm-9 col-md-9 col-lg-9" style="padding-right: 0px;">
 					<ul class="nomargin nopadding">
-						<li style="padding: 0 0 0 5px;">sdfg
-							<span class="fa fa-info-circle infoIcon" data-title="Chrome 13&quot;" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-chrome13" data-img="../media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						<li style="padding: 0 0 0 5px;">
+							CleanZone
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"style="top:3px;" data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
 						</li>
-						<li>List item</li>
-						<li>List item</li>
-						<li>List item</li>
-						<li>List item</li>
-						<li>List item</li>
-						<li>List item</li>
-						<li>List item</li>
+						<li style="padding: 0 0 0 5px;">
+							Glossy chrome door lower moduling emblem
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Colour coordinated door handles
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Standard mesh font
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Dual integrated tail pipes
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Cruise control
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Spped limiter
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Ventilated front seats
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Two step unlocking off
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Preparation for alarm
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							LED Illumination
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Fully adjustable passenger seat
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Airbag, type B
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Inflatable curtains
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Illuminated vanity mirrors
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Drive modes
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							First-aid kit
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Dynamic chaasis
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							CleanZone
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Glossy chrome door lower moduling emblem
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Colour coordinated door handles
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Standard mesh font
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Dual integrated tail pipes
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Cruise control
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Spped limiter
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Ventilated front seats
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Two step unlocking off
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Preparation for alarm
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							LED Illumination
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Fully adjustable passenger seat
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Airbag, type B
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Inflatable curtains
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Illuminated vanity mirrors
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Drive modes
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							First-aid kit
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Dynamic chaasis
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							CleanZone
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Glossy chrome door lower moduling emblem
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Colour coordinated door handles
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Standard mesh font
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Dual integrated tail pipes
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Cruise control
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Spped limiter
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Ventilated front seats
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Two step unlocking off
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Preparation for alarm
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							LED Illumination
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Fully adjustable passenger seat
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Airbag, type B
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Inflatable curtains
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Illuminated vanity mirrors
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Drive modes
+							<span class="fa fa-info-circle infoIcon" style="top:3px;"data-title="whatever name" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-asdf62" data-img="media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							First-aid kit
+						</li>
+						<li style="padding: 0 0 0 5px;">
+							Dynamic chaasis
+						</li>
 					</ul>
 				</div>
-			<!-- -->
-	        	<div class="col-sm-3 col-md-3 col-lg-3" style="padding-left: 0px;">
-	        		<div class="follow-scroll summaryBox nomargin nopadding">
-	        			price etc
+			<!--style="right: 0;z-index: 120;position: fixed;" -->
+	        	<div class="col-sm-3 col-md-3 col-lg-3 nopadding nomargin">
+	        		<div class="summaryBox nomargin nopadding">
+	        			<h4 style="padding-left: 10px;">Your Ford Mondeo</h4>
+	        			<hr class="nomargin nopadding" style="height:3px;border: none;background: black;">
+	        			<table>
+	        				<tr>
+	        					<td style="padding-right: 10px;padding-left: 5px;">
+	        						<span class="fa fa-floppy-o"></span>
+	        					</td>
+	        					<td>
+	        						Save Configuration
+	        					</td>
+	        				</tr>
+	        				<tr>
+	        					<td style="padding-right: 10px;padding-left: 5px;">
+	        						<span class="fa fa-download"></span>
+	        					</td>
+	        					<td>
+	        						Download PDF
+	        					</td>
+	        				</tr>
+	        			</table>
+	        			<table style="margin-top:20px;width: 100%;">
+	        				<tr>
+	        					<td>
+	        						Base Cost:
+	        					</td>
+	        					<td style=";padding-right: 10px;">
+	        						$22 000
+	        					</td>
+	        				</tr>
+	        				<tr>
+	        					<td>
+	        						Equipment:
+	        					</td>
+	        					<td style=";padding-right: 10px;">
+	        						$4 590
+	        					</td>
+	        				</tr>
+	        				<tr>
+	        					<td>
+	        						&nbsp;
+	        					</td>
+	        				</tr>
+	        				<tr>
+	        					<td>
+	        						Total Price:
+	        					</td>
+	        					<td style="padding-right: 10px;">
+	        						$26 590
+	        					</td>
+	        				</tr>
+	        				<tr>
+	        					<td>
+	        						Estimated Delivery:
+	        					</td>
+	        					<td style="padding-right: 10px;">
+	        						3 weeks
+	        					</td>
+	        				</tr>
+	        			</table>
+        				<button type="button" class="btn btn-default btn-lg float-right btn-success" style="margin:30px 15px 15px 0;">
+							Order &gt;
+						</button>
 	        		</div>
 	        	</div>
         	</div>
@@ -135,5 +561,32 @@
 			</div>
 		</div>
 		<!-- End Modals -->
+		<script>
+			var guiController = new GUIController();
+
+			guiController.object.addGuiElement('container',document.getElementById('container'));
+
+			guiController.object.addGuiElement('side', document.getElementById('side'));
+			guiController.object.addGuiElement('sidetext', document.getElementById("sidetext"));
+	        guiController.object.addGuiElement('sidebutton', document.getElementById("sidebutton"));
+
+	        guiController.object.addGuiElement('front', document.getElementById("front"));
+	        guiController.object.addGuiElement('fronttext', document.getElementById("fronttext"));
+	        guiController.object.addGuiElement('frontbutton', document.getElementById("frontbutton"));
+
+			guiController.object.addGuiElement('back',document.getElementById("back"));
+			guiController.object.addGuiElement('backtext', document.getElementById("backtext"));
+			guiController.object.addGuiElement('backbutton', document.getElementById('backbutton'));
+
+			guiController.object.addGuiElement('interior', document.getElementById("interior"));
+			guiController.object.addGuiElement('interiortext', document.getElementById("interiortext"));
+			guiController.object.addGuiElement('interiorbutton',document.getElementById("interiorbutton"));
+
+			guiController.object.addGuiElement('resetButton', document.getElementById('resetButton'));
+
+			guiController.object.addGuiElement('cameraButtons', document.getElementById('cameraButtons'));
+
+			guiController.initializeWEBGL();
+		</script>
 	</body>
 </html>

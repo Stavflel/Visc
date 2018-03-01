@@ -3,6 +3,8 @@
 <!-- Set active button -->
 <script type="text/javascript">
 	sessionStorage.setItem('exterior', 'visited');
+	sessionStorage.setItem('colourChoice', 'Gray')
+	sessionStorage.setItem('rimsChoice', 'Chrome 12&quot')
 	
 	if($("#exteriorBar").hasClass('visitedBar')){
 		$("#exteriorBar").removeClass("visitedBar");
@@ -26,7 +28,6 @@
 
 	$(document).ready(function () {
 		if( $("#addonsBar").hasClass("activeBar")) {
-			console.log( "ready!" );
 			$("#addonsBar").removeClass("activeBar");
 			$("#addonsBar").addClass("visitedBar");
 		}
@@ -55,37 +56,37 @@
 		<div id="collapse1" class="panel-collapse collapse show">
 			<div class="panel-body row nopadding nomargin">
 				<!-- Start content -->
-				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorRed">
+				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorRed" onclick="saveSession('colourChoice', 'Red')">
 					<div class="colorPick red centerX"></div>
 					<p class="colorName">
 						Red
 					</p>
 				</div>
-				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorBlue">
+				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorBlue" onclick="saveSession('colourChoice', 'Blue')">
 					<div class="colorPick blue centerX"></div>
 					<p class="colorName">
 						Blue
 					</p>
 				</div>
-				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorPurple">
+				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorPurple" onclick="saveSession('colourChoice', 'Purple')">
 					<div class="colorPick purple centerX"></div>
 					<p class="colorName">
 						Black
 					</p>
 				</div>
-				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorGray">
+				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorGray" onclick="saveSession('colourChoice', 'Gray')">
 					<div class="colorPick gray centerX"></div>
 					<p class="colorName">
 						Gray
 					</p>
 				</div>
-				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorTeal">
+				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorTeal" onclick="saveSession('colourChoice', 'Teal')">
 					<div class="colorPick teal centerX"></div>
 					<p class="colorName">
 						White
 					</p>
 				</div>
-				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorOrange">
+				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorOrange" onclick="saveSession('colourChoice', 'Orange')">
 					<div class="colorPick orange centerX"></div>
 					<p class="colorName">
 						Orange
@@ -111,38 +112,44 @@
 		<div id="collapse2" class="panel-collapse collapse">
 			<div class="panel-body row nopadding nomargin">
 				<!-- Start content -->
-				<div class="col-md-4 col-sm-4 col-xs-4 item" id="rimOne">
-					<span class="fa fa-info-circle infoIcon" data-title="Chrome 13&quot;" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-chrome13" data-img="../media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+				<div class="col-md-4 col-sm-4 col-xs-4 item" id="rimOne" onclick="saveSession('rimsChoice', 'Chrome 12&quot')">
+					<span class="fa fa-info-circle infoIcon" data-title="Chrome 12&quot;" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-chrome12" data-img="../media/rim1.png" data-info="The rim is the outer edge of a wheel, holding the tire. It makes up the outer circular design of the wheel on which the inside edge of the tire is mounted on vehicles such as automobiles. For example, on a bicycle wheel the rim is a large hoop attached to the outer ends of the spokes of the wheel that holds the tire and tube. The term rim is also used non-technically to refer to the entire wheel, or even to a tire. To support the cylindrical rim structure, a disc is made by stamping a metal plate. It has to have appropriate holes for the center hub and lug nuts. The radial outer surface of the wheel disk has a cylindrical geometry to fit inside the rim. The rim and wheel disk are assembled by fitting together under the outer seat of the rim and the assembly welded together. The disk is welded in place such that the center of the wheel is equal to the center of the hub. The distance of the disc to the back edge of the rim is called 'offset', or ET, from German Einpresstiefe."></span>
 					<img src="media/rim1.png" class="itemImg centerX">
 					<p class="itemName">
-						Chrome12"
+						Chrome 12"
 					</p>
 					<p class="price text-center">
-						546 USD
+						300 USD
 					</p>
 				</div>
-				<div class="col-md-4 col-sm-4 col-xs-4 item" id="rimTwo">
-					<span class="fa fa-info-circle infoIcon" data-title="Chrome 13&quot;" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-chrome13" data-img="../media/rim1.png" data-info="sample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info textsample info text"></span>
+				<div class="col-md-4 col-sm-4 col-xs-4 item" id="rimTwo" onclick="saveSession('rimsChoice', 'Chrome 14&quot')">
+					<span class="fa fa-info-circle infoIcon" data-title="Chrome 14&quot;" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-chrome14" data-img="../media/rim1.png" data-info="The term rim is also used non-technically to refer to the entire wheel, or even to a tire. To support the cylindrical rim structure, a disc is made by stamping a metal plate. It has to have appropriate holes for the center hub and lug nuts. The radial outer surface of the wheel disk has a cylindrical geometry to fit inside the rim. The rim and wheel disk are assembled by fitting together under the outer seat of the rim and the assembly welded together. The disk is welded in place such that the center of the wheel is equal to the center of the hub. The distance of the disc to the back edge of the rim is called 'offset', or ET, from German Einpresstiefe."></span>
 					<img src="media/rim1.png" class="itemImg centerX">
 					<p class="itemName">
-						Chrome12"
+						Chrome 14"
 					</p>
 					<p class="price text-center">
-						200 USD
+						350 USD
 					</p>
 				</div>
-				<div class="col-md-4 col-sm-4 col-xs-4 item" id="rimThree">
-					<span class="fa fa-info-circle infoIcon" data-title="Chrome 13&quot;" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-chrome13" data-img="../media/rim1.png" data-info="sample info text"></span>
+				<div class="col-md-4 col-sm-4 col-xs-4 item" id="rimThree" onclick="saveSession('rimsChoice', 'Alloy 12&quot')">
+					<span class="fa fa-info-circle infoIcon" data-title="Alloy 12&quot;" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-alloy12" data-img="../media/rim1.png" data-info="For example, on a bicycle wheel the rim is a large hoop attached to the outer ends of the spokes of the wheel that holds the tire and tube. The term rim is also used non-technically to refer to the entire wheel, or even to a tire. To support the cylindrical rim structure, a disc is made by stamping a metal plate. It has to have appropriate holes for the center hub and lug nuts. The distance of the disc to the back edge of the rim is called 'offset', or ET, from German Einpresstiefe."></span>
 					<img src="media/rim1.png" class="itemImg centerX">
 					<p class="itemName">
-						Chrome12"
+						Alloy 12"
+					</p>
+					<p class="price text-center">
+						500 USD
 					</p>
 				</div>
-				<div class="col-md-4 col-sm-4 col-xs-4 item" id="rimFour">
-					<span class="fa fa-info-circle infoIcon" data-title="Chrome 13&quot;" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-chrome13" data-img="../media/rim1.png" data-info="sample info text"></span>
+				<div class="col-md-4 col-sm-4 col-xs-4 item" id="rimFour" onclick="saveSession('rimsChoice', 'Alloy 14&quot')">
+					<span class="fa fa-info-circle infoIcon" data-title="Alloy 14&quot;" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-alloy14" data-img="../media/rim1.png" data-info="The term rim is also used non-technically to refer to the entire wheel, or even to a tire. To support the cylindrical rim structure, a disc is made by stamping a metal plate. It has to have appropriate holes for the center hub and lug nuts. The radial outer surface of the wheel disk has a cylindrical geometry to fit inside the rim "></span>
 					<img src="media/rim1.png" class="itemImg centerX">
 					<p class="itemName">
-						Chrome12"
+						Alloy 14"
+					</p>
+					<p class="price text-center">
+						550 USD
 					</p>
 				</div>
 				<!-- End content -->

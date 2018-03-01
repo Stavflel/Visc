@@ -1,5 +1,6 @@
 
 jQuery('[id^=infoModal-]').on('click',function(){
+    console.log('asdf');
     var title = $(this).data('title');
     var info = $(this).data('info');
     var img = $(this).data('img');
@@ -57,10 +58,6 @@ function changeModelName(name)
     document.getElementById("modelName").innerHTML = name;
 }
 
-$(document).on("scroll", function(){
-    if($(document).scrollTop() > 100){
-        $("header").addClass("shrink");
-    }else{
-        $("header").removeClass("shrink");
-    }
-});
+function saveSession(name, value){
+    sessionStorage.setItem(name, value);
+}
