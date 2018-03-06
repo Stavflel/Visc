@@ -25,6 +25,25 @@
 	<script src="CD132_Ford_buck_jt.jt.json/models.js"></script>
 	<script src="js/GUIController.js"></script>
     <script src="js/ContextRenderer.js"></script>
+
+    <script type="text/javascript">
+			$(document).ready(function ($) {
+			    if( sessionStorage.getItem('exterior') === 'visited') {
+	        		$("#exteriorBar").addClass("visitedBar");
+	    		}
+			    if( sessionStorage.getItem('interior') === 'visited') {
+	        		$("#interiorBar").addClass("visitedBar");
+	    		}
+	    		if( sessionStorage.getItem('addons') === 'visited') {
+	        		$("#addonsBar").addClass("visitedBar");
+	    		}
+	    		if( sessionStorage.getItem('summary') === 'visited') {
+	        		$("#summaryBar").addClass("visitedBar");
+	    		}
+	        		
+	        	$("#modelBar").addClass("visitedBar");
+        	});
+		</script>
 </head>
 
 <body>
@@ -180,7 +199,7 @@
 	</div>
 	<!-- End Modals -->
 
-	<!--<script>
+	<script>
 		var guiController = new GUIController();
 		var contextRender = new ContextRender(new THREE.CubeTextureLoader().setPath( 'textures/backgroundone/')
             .load( [ 'posx.jpg', 'negx.jpg', 'posy.jpg', 'negy.jpg', 'posz.jpg', 'negz.jpg' ] ),guiController
