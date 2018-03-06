@@ -81,26 +81,24 @@
 					<!-- Start price box -->
 					<div id="priceBox" class="nopadding nomargin configBackground">
 						<table>
-							<tr>
-								<td>
-									<b>Price:</b>
+							<tr class="priceTr">
+								<td class="priceTable">
+									<b class="priceLeftText">Price:</b>
 								</td>
-								<td style="padding:0 0 0 15px;">
-									$
-									<p id="totalPrice" style="display: inline;">
-										10000
+								<td class="priceTable" style="padding:0 0 0 15px;">
+									<p id="totalPrice" class="priceRightText" style="display: inline;">
+										$ 10000
 									</p>
 								</td>
 							</tr>
-							<tr>
-								<td>
-									<b>Delivery:</b>
+							<tr class="priceTr">
+								<td class="priceTable" >
+									<b class="priceLeftText">Delivery:</b>
 								</td>
-								<td style="padding:0 0 0 15px;">
-									<p id="totalDelivery" style="display: inline;">
-										2 
+								<td class="priceTable" style="padding:0 0 0 15px;">
+									<p id="totalDelivery" class="priceRightText" style="display: inline;">
+										2 Weeks
 									</p>
-									Weeks
 								</td>
 							</tr>
 						</table>
@@ -189,7 +187,9 @@
 		);
 
 		setTimeout(function () {
-			contextRender.object.renderMaterials();
+			contextRender.object.setNewTexture('bridgeBackground');
+			guiController.object.clearBackgroundSelected();
+			guiController.object.addBackgroundSelected('bridgeBackground');
         },13000);
 
 		guiController.object.addGuiElement('container',document.getElementById('container'));

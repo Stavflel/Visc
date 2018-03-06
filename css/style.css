@@ -18,6 +18,11 @@ h4{
 .underline-sidebar{
    opacity:0.7;
  }
+
+.centerXY {
+    color:white;
+}
+
 .groupHead{
    color:black;
 }
@@ -160,29 +165,44 @@ h4.panel-title a .fa-caret-down {
     padding: 0px;
 }
 
+
+.priceRightText{
+    padding-right:5px;
+}
+.priceLeftText{
+    font-weight: 450;
+    padding-left:5px;
+}
 #priceBox{
+
     z-index: 10; 
     position: absolute; 
-    bottom: 45px; 
-    right: 0px;
+    bottom: 50px;
+    right: 5px;
 
     padding-top: 5px !important;
     padding-left: 5px !important;
     padding-right: 5px !important;
+    padding-bottom: 5px !important;
     
-    box-shadow: -2px -2px 12px 1px #222;
+    /*box-shadow: -2px -2px 12px 1px #222;
     -moz-box-shadow: -2px -2px 12px 1px #222;
-    -webkit-box-shadow: -2px -2px 12px 1px #222;
+    -webkit-box-shadow: -2px -2px 12px 1px #222;*/
 
-    border-radius: 10px 0px 0px 0px;
+    /*border-radius: 10px 0px 0px 0px;
     -moz-border-radius: 10px 0px 0px 0px;
-    -webkit-border-radius: 10px 0px 0px 0px;
+    -webkit-border-radius: 10px 0px 0px 0px;*/
 
     /* background: white;*/
-    
+    background: rgba(0, 0, 0, 0.4);
     margin:0px auto;
-    border-left:2px solid #fff;
-    border-right:2px solid #fff;
+
+    border-radius:5px;
+    /*border-left:2px solid #fff;
+    border-right:2px solid #fff;*/
+}
+.priceTable{
+    color:white;
 }
 
 .text-center{
@@ -264,13 +284,13 @@ h4.panel-title a .fa-caret-down {
     cursor: pointer;
 }
 #backgroundButton .items.inactiveState{
-    display: none;
+    display: block;
 }
 #backgroundButton .items.activeState{
     display: block;
     border-style: solid;
     border-width: 1px 1px 1px 1px;
-    border-color: rgba(255,255,255,0.7);
+    border-color: rgba(255,255,255,0.4);
 
 }
 #bridgeBackground{

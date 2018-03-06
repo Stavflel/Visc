@@ -53,7 +53,20 @@ GUIController = function () {
             },
             dispatchListeners: function () {
                 //Todo dettach exterior listeners
-            }
+            },
+            addBackgroundSelected: function(id){
+                         $(scope.object.getGuiElements()[id]).removeClass('inactiveState');
+                         $(scope.object.getGuiElements()[id]).addClass('activeState');
+             },
+             clearBackgroundSelected: function() {
+                 $(scope.object.getGuiElements()['nightBackground']).removeClass('activeState');
+                 $(scope.object.getGuiElements()['bridgeBackground']).removeClass('activeState');
+                 $(scope.object.getGuiElements()['cloudBackground']).removeClass('activeState');
+
+                 $(scope.object.getGuiElements()['nightBackground']).addClass('inactiveState');
+                 $(scope.object.getGuiElements()['bridgeBackground']).addClass('inactiveState');
+                 $(scope.object.getGuiElements()['cloudBackground']).addClass('inactiveState');
+             }
         }
     })();
 
@@ -357,9 +370,12 @@ GUIController = function () {
     }
     function backgroundListener(event) {
         contextRender.object.setNewTexture(this.id);
-        clearBackgroundSelected();
-        $(scope.object.getGuiElements()[this.id]).removeClass('inactiveState');
-        $(scope.object.getGuiElements()[this.id]).addClass('activeState');
+        scope.object.clearBackgroundSelected();
+        scope.object.addBackgroundSelected(this.id)
+    }
+    /*function addBackgroundSelected(id){
+        $(scope.object.getGuiElements()[id]).removeClass('inactiveState');
+        $(scope.object.getGuiElements()[id]).addClass('activeState');
     }
     function clearBackgroundSelected() {
         $(scope.object.getGuiElements()['nightBackground']).removeClass('activeState');
@@ -369,7 +385,7 @@ GUIController = function () {
         $(scope.object.getGuiElements()['nightBackground']).addClass('inactiveState');
         $(scope.object.getGuiElements()['bridgeBackground']).addClass('inactiveState');
         $(scope.object.getGuiElements()['cloudBackground']).addClass('inactiveState');
-    }
+    }*/
     function addBackgroundListeners() {
         setTimeout(function () {
             scope.object.getGuiElements()['nightBackground'].addEventListener('click', backgroundListener);
