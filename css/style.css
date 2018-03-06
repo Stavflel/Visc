@@ -18,11 +18,9 @@ h4{
 .underline-sidebar{
    opacity:0.7;
  }
+
 .groupHead{
    color:black;
-}
-#navBar{
-    margin-top: -10px;
 }
 a.groupHead:hover{
     text-decoration: none;
