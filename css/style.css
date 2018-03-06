@@ -25,6 +25,9 @@ h4{
 a.groupHead:hover{
     text-decoration: none;
 }
+#navBar {
+    margin-top:-10px;
+}
 #resetButton{
     position: absolute;
     z-index: 1000;
