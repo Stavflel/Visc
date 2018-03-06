@@ -115,12 +115,16 @@ a.groupHead:hover{
 h4.panel-title a.collapsed .fa-caret-down {
         color: #ada9a9 !important;
         transform: rotate(0deg);
-        margin-top: 10px;
+        margin-top: 8px;
 }
 h4.panel-title a .fa-caret-down {
         color: #515e64 !important;
         transform: rotate(180deg);
-        margin-top: 10px;
+        margin-top: 8px;
+}
+
+.panel-body{
+    padding: 0 8px 0 8px;
 }
 
 .infoIcon{
@@ -225,11 +229,23 @@ h4.panel-title a .fa-caret-down {
 }
 
 .activeBar{
-    background: #666666;
+    background: #656565 !important;
+    color:#fcfcfc !important;
 }
 .visitedBar{
-    background: #a0a0a0;
+    background: #878787 !important;
+    color:#fcfcfc !important;
 }
+.navBar{
+    background: #c0c0c0;
+    color:#272727;
+    border-radius:0 !important;
+}
+.navBar:hover{
+    background: #656565 !important;
+    color:#fcfcfc !important;
+}
+
 .leftBorder{
     border-left: 5px solid;
     border-color: #555759;

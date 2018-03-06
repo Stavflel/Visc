@@ -57,6 +57,7 @@ function changeModelName(name)
 {
     document.getElementById("modelName").innerHTML = name;
     $("#carImg").attr("src", 'media/fordthumb.png');
+    document.getElementById("configButton").style.visibility = "visible";
 }
 
 function saveSession(name, value){
