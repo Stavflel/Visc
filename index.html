@@ -28,7 +28,7 @@
 </head>
 
 <body>
-	<div class="container" style="box-shadow: 5px 5px 5px -5px #333;">
+	<div class="container" style="box-shadow: 0 0 5px #333;border: 1px solid;">
 		<div class="row">
 			<!-- Start Main window -->
 			<div class="col-md-8 nomargin nopadding">
@@ -111,28 +111,28 @@
 				<!-- Start bottom bar -->
 				<div class="col-md-12 nomargin nopadding btn-group configBackground">
 				<!-- Start Menu bar -->	
-					<a type="button" href="model.html" page="model" class="btn btn-default btn-lg btn-arrow-start navBar" id="modelBar">
-						<p class="centerXY">
+					<a href="model.html" page="model" class="btn btn-default btn-lg btn-arrow-start navBar" id="modelBar">
+						<p class="centerXY"  style="padding-right:20px;">
 							Model
 						</p>
 					</a>
-					<a type="button" href="#" page="exterior" class="btn btn-default btn-lg btn-arrow-right links navBar" id="exteriorBar">
-						<p class="centerXY">
+					<a href="#" page="exterior" class="btn btn-default btn-lg btn-arrow-right links navBar" id="exteriorBar">
+						<p class="centerXY" style="padding-left:10px;">
 							Exterior
 						</p>
 					</a>
-					<a type="button" href="#" page="interior" class="btn btn-default btn-lg btn-arrow-right links navBar" id="interiorBar">
-						<p class="centerXY">
+					<a href="#" page="interior" class="btn btn-default btn-lg btn-arrow-right links navBar" id="interiorBar">
+						<p class="centerXY" style="padding-left:10px;">
 							Interior
 						</p>
 					</a>
-					<a type="button" href="#" page="addons" class="btn btn-default btn-lg btn-arrow-right links navBar" id="addonsBar">
-						<p class="centerXY">
+					<a href="#" page="addons" class="btn btn-default btn-lg btn-arrow-right links navBar" id="addonsBar">
+						<p class="centerXY" style="padding-left:10px;">
 							Addons
 						</p>
 					</a>
-					<a type="button" href="summary.html" page="summary" class="btn btn-default btn-lg btn-arrow-end navBar" id="summaryBar">
-						<p class="centerXY">
+					<a href="summary.html" page="summary" class="btn btn-default btn-lg btn-arrow-end navBar" id="summaryBar">
+						<p class="centerXY" style="padding-left:20px;">
 							Summary
 						</p>
 					</a>
@@ -180,7 +180,7 @@
 	</div>
 	<!-- End Modals -->
 
-	<script>
+	<!--<script>
 		var guiController = new GUIController();
 		var contextRender = new ContextRender(new THREE.CubeTextureLoader().setPath( 'textures/backgroundone/')
             .load( [ 'posx.jpg', 'negx.jpg', 'posy.jpg', 'negy.jpg', 'posz.jpg', 'negz.jpg' ] ),guiController
