@@ -186,6 +186,10 @@
             .load( [ 'posx.jpg', 'negx.jpg', 'posy.jpg', 'negy.jpg', 'posz.jpg', 'negz.jpg' ] ),guiController
 		);
 
+		setTimeout(function () {
+			contextRender.object.renderMaterials();
+        },13000);
+
 		guiController.object.addGuiElement('container',document.getElementById('container'));
 
 		guiController.object.addGuiElement('side', document.getElementById('side'));

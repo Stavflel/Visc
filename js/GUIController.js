@@ -146,6 +146,8 @@ GUIController = function () {
             light.position.set( 600, 0, 600 );
             scene.add( light );
 
+            var light2 = new THREE.AmbientLight( 0x404040 ); // soft white light
+            scene.add( light2 );
             var geometry = new THREE.CircleBufferGeometry( 100, 100);
             var planeMaterial = new THREE.MeshPhongMaterial( { color: 0x00000, side: THREE.DoubleSide, specular: 0x101010 } );
             var ground = new THREE.Mesh( geometry, planeMaterial );
