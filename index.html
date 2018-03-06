@@ -105,11 +105,10 @@
 					</div>
 					<!-- End price box -->
 				</div>
-				<span id="resetButton">x</span>
 				<!-- End visualisation -->
 
 				<!-- Start bottom bar -->
-				<div class="col-md-12 nomargin nopadding btn-group configBackground">
+				<div id="navBar" class="col-md-12 nomargin nopadding btn-group configBackground">
 				<!-- Start Menu bar -->	
 					<a href="model.html" page="model" class="btn btn-default btn-lg btn-arrow-start navBar" id="modelBar">
 						<p class="centerXY"  style="padding-right:20px;">
@@ -180,7 +179,8 @@
 	</div>
 	<!-- End Modals -->
 
-	<!--<script>
+	<script>
+
 		var guiController = new GUIController();
 		var contextRender = new ContextRender(new THREE.CubeTextureLoader().setPath( 'textures/backgroundone/')
             .load( [ 'posx.jpg', 'negx.jpg', 'posy.jpg', 'negy.jpg', 'posz.jpg', 'negz.jpg' ] ),guiController
@@ -279,6 +279,11 @@
 			}
 
 		});
+
+		setTimeout(function(){
+			 console.log("height" + document.getElementById("container").offsetHeight );
+            console.log("height" + document.getElementById("container").clientHeight );
+		},10)
 
 	</script>
 	<!-- End Scripts -->

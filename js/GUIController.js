@@ -74,7 +74,7 @@ GUIController = function () {
 
     this.initializeWEBGL = function () {
         reset_Button = scope.object.getGuiElements()['resetButton'];
-        reset_Button.style.display = 'none';
+        //reset_Button.style.display = 'none';
         //camera nav variables
 
         setViewPorts();
@@ -130,12 +130,20 @@ GUIController = function () {
             containerWidth = container.clientWidth;
             containerHeight = container.clientHeight;
             renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
-            renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.setSize(containerWidth, containerHeight);
+            //renderer.setPixelRatio(window.devicePixelRatio);
+            console.log("height" + document.getElementById("container").offsetHeight );
+            console.log("height" + document.getElementById("container").clientHeight );
+            renderer.setSize(document.getElementById("container").clientWidth, document.getElementById("container").clientHeight);
             renderer.gammaInput = true;
             renderer.gammaOutput = true;
             renderer.shadowMap.enabled = true;
-            container.appendChild(renderer.domElement);
+            document.getElementById("container").appendChild(renderer.domElement);
+
+            setTimeout(function(){
+            			/* console.log("height" + document.getElementById("container").offsetHeight );
+                        console.log("height" + document.getElementById("container").clientHeight );*/
+                       renderer.setSize(document.getElementById("container").offsetWidth, document.getElementById("container").offsetHeight);
+            },13000);
 
             // Add object picking
             projector = new THREE.Projector();
