@@ -1,7 +1,29 @@
+
+h4{
+    line-height:1.5;
+}
+.sidebar.fa{
+        margin-top: 5px;
+}
 .configBackground{
     background: #fcfcfc;
 }
-
+.ford-title {
+     background:gray;
+     padding-top: 10px;
+     padding-bottom: 15px;
+     border-bottom: solid 1px;
+     color:white;
+ }
+.underline-sidebar{
+   opacity:0.7;
+ }
+.groupHead{
+   color:black;
+}
+a.groupHead:hover{
+    text-decoration: none;
+}
 #resetButton{
     position: absolute;
     z-index: 1000;
@@ -93,10 +115,12 @@
 h4.panel-title a.collapsed .fa-caret-down {
         color: #ada9a9 !important;
         transform: rotate(0deg);
+        margin-top: 10px;
 }
 h4.panel-title a .fa-caret-down {
         color: #515e64 !important;
         transform: rotate(180deg);
+        margin-top: 10px;
 }
 
 .infoIcon{

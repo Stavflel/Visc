@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="css/style.css" />
+
 <script src="js/scripts.js"></script>
 
 <!-- Set active button -->
@@ -48,15 +50,15 @@
 			<h4 class="panel-title">
 				<a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="groupHead">
 					Colour
-					<span class="fa fa-caret-down" data-toggle="collapse" data-parent="#accordion" href="#collapse1" style="float:right; padding-left: 8px; padding-right: 8px;"></span>
+					<span  class="sidebar fa fa-caret-down" data-toggle="collapse" data-parent="#accordion" href="#collapse1" style="float:right; padding-left: 8px; padding-right: 8px;"></span>
 				</a>
-				<hr class="nomargin nopadding">	
+				<hr class="underline-sidebar nomargin nopadding">
 			</h4>
 		</div>
 		<div id="collapse1" class="panel-collapse collapse show">
 			<div class="panel-body row nopadding nomargin">
 				<!-- Start content -->
-				<div class="col-md-3 col-sm-3 col-xs-3 colorItem" id="colorRed" onclick="saveSession('colourChoice', 'Red')">
+				<div class="col-md-3 col-sm-3 col-xs-3 colorItem highlight" id="colorRed" onclick="saveSession('colourChoice', 'Red')">
 					<div class="colorPick red centerX"></div>
 					<p class="colorName">
 						Red
@@ -106,13 +108,13 @@
 					Rims
 					<span class="fa fa-caret-down" data-toggle="collapse" data-parent="#accordion" href="#collapse2" style="float:right; padding-left: 8px; padding-right: 8px;z-index: 100000;"></span>
 				</a>
-				<hr class="nomargin nopadding">
+				<hr class="underline-sidebar nomargin nopadding">
 			</h4>
 		</div>
 		<div id="collapse2" class="panel-collapse collapse">
 			<div class="panel-body row nopadding nomargin">
 				<!-- Start content -->
-				<div class="col-md-4 col-sm-4 col-xs-4 item" id="rimOne" onclick="saveSession('rimsChoice', 'Chrome 12&quot')">
+				<div class="col-md-4 col-sm-4 col-xs-4 item highlight" id="rimOne" onclick="saveSession('rimsChoice', 'Chrome 12&quot')">
 					<span class="fa fa-info-circle infoIcon" data-title="Chrome 12&quot;" data-toggle="modal" data-target=".bd-example-modal-lg" id="infoModal-chrome12" data-img="../media/rim1.png" data-info="The rim is the outer edge of a wheel, holding the tire. It makes up the outer circular design of the wheel on which the inside edge of the tire is mounted on vehicles such as automobiles. For example, on a bicycle wheel the rim is a large hoop attached to the outer ends of the spokes of the wheel that holds the tire and tube. The term rim is also used non-technically to refer to the entire wheel, or even to a tire. To support the cylindrical rim structure, a disc is made by stamping a metal plate. It has to have appropriate holes for the center hub and lug nuts. The radial outer surface of the wheel disk has a cylindrical geometry to fit inside the rim. The rim and wheel disk are assembled by fitting together under the outer seat of the rim and the assembly welded together. The disk is welded in place such that the center of the wheel is equal to the center of the hub. The distance of the disc to the back edge of the rim is called 'offset', or ET, from German Einpresstiefe."></span>
 					<img src="media/rim1.png" class="itemImg centerX">
 					<p class="itemName">
@@ -166,7 +168,7 @@
 					Another option
 					<span class="fa fa-caret-down" data-toggle="collapse" data-parent="#accordion" href="#collapse3" style="float:right; padding-left: 8px; padding-right: 8px;"></span>
 				</a>
-				<hr class="nomargin nopadding">
+				<hr class="underline-sidebar nomargin nopadding">
 			</h4>
 		</div>
 		<div id="collapse3" class="panel-collapse collapse">
